@@ -1,0 +1,14 @@
+{
+  "name": "rn-nano",
+  "version": "1.0.3",
+  "description": "",
+  "main": "index.js",
+  "bin": {
+    "rn-nano": "./bin.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "sandarshnaroju",
+  "license": "ISC"
+}
