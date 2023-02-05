@@ -39,9 +39,9 @@ const downloadresult = runCommand(downloadAppjsCommand);
 if (!downloadresult) process.exit(-1);
 console.log("successfully downloaded and setup started code");
 
-const installScreensAndSafeArea = `cd ${repoName} && npm install --save react-native-nano react-native-safe-area-context react-native-screens`;
+const installScreensAndSafeArea = `cd ${repoName} && npm install --save react-native-nano react-native-safe-area-context react-native-screens realm`;
 const installScreensAndSafeAreaResult = runCommand(installScreensAndSafeArea);
 
 if (!installScreensAndSafeAreaResult) process.exit(-1);
-console.log("successfully installed safearea and screens and nano");
+console.log("Welcome to Nano");
 process.exit(0);
