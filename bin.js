@@ -32,9 +32,10 @@ console.log("Installing and setting up React native");
 const deleteAppts = `cd ${repoName} && rm -rf App.tsx `;
 const delCommand = runCommand(deleteAppts);
 if (!delCommand) process.exit(-1);
-const downloadWelcomescreenFiles = `curl -LJO -s -S ${commonUrl}src/screens/Welcome.js >> /dev/null && curl -LJO -s -S ${commonUrl}src/logic/Logic.js >> /dev/null && curl -LJO -s -S ${commonUrl}src/screens/index.js >> /dev/null`;
 
-const downloadAppjsCommand = `cd ${repoName} && curl -LJO -s -S ${commonUrl}App.js >> /dev/null && mkdir src && cd src && mkdir screens && cd screens && ${downloadWelcomescreenFiles}`;
+const downloadWelcomescreenFiles = `curl -LJO ${commonUrl}src/screens/Welcome.js && curl -LJO  ${commonUrl}src/screens/index.js`;
+const downloadLogicFile = `curl -LJO ${commonUrl}src/logic/Logic.js`;
+const downloadAppjsCommand = `cd ${repoName} && curl -LJO ${commonUrl}App.js  && mkdir src && cd src && mkdir screens && cd screens && ${downloadWelcomescreenFiles} && cd .. && mkdir logic && cd logic && ${downloadLogicFile}`;
 const downloadresult = runCommand(downloadAppjsCommand);
 if (!downloadresult) process.exit(-1);
 console.log("successfully downloaded and setup started code");
