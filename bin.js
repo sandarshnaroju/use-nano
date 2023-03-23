@@ -27,7 +27,7 @@ const askUser = (ques) => {
 };
 
 const setUpANewProject = ({ repoName }) => {
-  const reactnativeinstall = `npx react-native init ${repoName} --version 0.70.6`;
+  const reactnativeinstall = `npx react-native init ${repoName} --version 0.71.3`;
   const checkedOut = runCommand(reactnativeinstall);
   if (!checkedOut) process.exit(-1);
 
@@ -44,7 +44,7 @@ const setUpANewProject = ({ repoName }) => {
   if (!downloadresult) process.exit(-1);
   console.log("successfully downloaded and setup started code");
 
-  const installScreensAndSafeArea = `cd ${repoName} && npm install --save react-native-nano react-native-safe-area-context react-native-screens realm@11.3.1 @notifee/react-native react-native-pager-view`;
+  const installScreensAndSafeArea = `cd ${repoName} && npm install --save react-native-nano react-native-permissions react-native-safe-area-context react-native-screens realm@11.5.2 @notifee/react-native react-native-pager-view`;
   const installScreensAndSafeAreaResult = runCommand(installScreensAndSafeArea);
 
   if (!installScreensAndSafeAreaResult) process.exit(-1);
@@ -63,7 +63,7 @@ const addConfigToExistingProject = async () => {
   const createFileCommandRes = runCommand(createFileCommand);
   if (!createFileCommandRes) process.exit(-1);
 
-  const clientIdCommand = `printf 'export const CLIENT_ID = '${clientId}'; \n export const CLIENT_SECRET = '${clientSecret}';' > nano.config.js `;
+  const clientIdCommand = `printf 'export const CLIENT_ID = '${clientId}'; \n export const CLIENT_SECRET = '${clientSecret}';  \n export const DataBaseConfig = { \n // schema:"your schema object" , \n // schemaVersion: "", \n} ;   ' > nano.config.js `;
 
   const clientIdCommandRes = runCommand(clientIdCommand);
 
