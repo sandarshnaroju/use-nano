@@ -48,10 +48,26 @@ const setUpANewProject = ({ repoName }) => {
   const installScreensAndSafeAreaResult = runCommand(installScreensAndSafeArea);
 
   if (!installScreensAndSafeAreaResult) process.exit(-1);
+  createNanoConfig();
+
   console.log("Welcome to Nano");
   process.exit(0);
 };
+const createNanoConfig = (id, secret) => {
+  const createFileCommand = `touch nano.config.js`;
+  const createFileCommandRes = runCommand(createFileCommand);
+  if (!createFileCommandRes) process.exit(-1);
+  let clientIdCommand = "";
+  if (id != null && secret != null) {
+    clientIdCommand = `printf 'export const CLIENT_ID = '${id}'; \n export const CLIENT_SECRET = '${secret}';  \n export const DataBaseConfig = { \n // schema:"your schema object" , \n // schemaVersion: "", \n} ;   ' > nano.config.js `;
+  } else {
+    clientIdCommand = `printf 'export const CLIENT_ID = 'id'; \n export const CLIENT_SECRET = 'secret';  \n export const DataBaseConfig = { \n // schema:"your schema object" , \n // schemaVersion: "", \n} ;   ' > nano.config.js `;
+  }
 
+  const clientIdCommandRes = runCommand(clientIdCommand);
+
+  if (!clientIdCommandRes) process.exit(-1);
+};
 const addConfigToExistingProject = async () => {
   let clientId = null;
   let clientSecret = null;
@@ -59,15 +75,7 @@ const addConfigToExistingProject = async () => {
   clientId = await askUser("Enter the project clientId: ");
   clientSecret = await askUser("Enter the project clientSecret: ");
   rl.close();
-  const createFileCommand = `touch nano.config.js`;
-  const createFileCommandRes = runCommand(createFileCommand);
-  if (!createFileCommandRes) process.exit(-1);
-
-  const clientIdCommand = `printf 'export const CLIENT_ID = '${clientId}'; \n export const CLIENT_SECRET = '${clientSecret}';  \n export const DataBaseConfig = { \n // schema:"your schema object" , \n // schemaVersion: "", \n} ;   ' > nano.config.js `;
-
-  const clientIdCommandRes = runCommand(clientIdCommand);
-
-  if (!clientIdCommandRes) process.exit(-1);
+  createNanoConfig(clientId, clientSecret);
 };
 const args = process.argv.slice(2);
 
