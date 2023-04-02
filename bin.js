@@ -54,7 +54,7 @@ const setUpANewProject = ({ repoName, appId = null, appSecret = null }) => {
   if (!delCommand) process.exit(-1);
   createFolderStructure();
 
-  const installScreensAndSafeArea = `cd ${repoName} && npm install --save react-native-nano react-native-permissions react-native-safe-area-context react-native-screens realm@11.5.2 @notifee/react-native react-native-pager-view`;
+  const installScreensAndSafeArea = `cd ${repoName} && npm install --save react-native-nano react-native-permissions react-native-safe-area-context react-native-screens react-native-rsa-native realm@11.5.2 @notifee/react-native react-native-pager-view`;
   const installScreensAndSafeAreaResult = runCommand(installScreensAndSafeArea);
 
   if (!installScreensAndSafeAreaResult) process.exit(-1);
@@ -78,7 +78,7 @@ const setUpANewMinimalProject = ({
   if (!delCommand) process.exit(-1);
   createFolderStructureForMinimalProject();
 
-  const installScreensAndSafeArea = `cd ${repoName} && npm install --save react-native-nano react-native-permissions react-native-safe-area-context react-native-screens realm@11.5.2 @notifee/react-native react-native-pager-view`;
+  const installScreensAndSafeArea = `cd ${repoName} && npm install --save react-native-nano react-native-rsa-native react-native-permissions react-native-safe-area-context react-native-screens realm@11.5.2 @notifee/react-native react-native-pager-view`;
   const installScreensAndSafeAreaResult = runCommand(installScreensAndSafeArea);
 
   if (!installScreensAndSafeAreaResult) process.exit(-1);
