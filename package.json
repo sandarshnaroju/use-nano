@@ -1,8 +1,9 @@
 {
   "name": "rn-nano",
-  "version": "1.0.18",
+  "version": "1.0.35",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "bin": {
     "rn-nano": "./bin.js"
   },
@@ -12,6 +13,8 @@
   "author": "sandarshnaroju",
   "license": "ISC",
   "dependencies": {
-    "inquirer": "^8.2.5"
+    "adm-zip": "^0.5.10",
+    "inquirer": "^8.2.5",
+    "node-fetch": "^3.3.2"
   }
 }
