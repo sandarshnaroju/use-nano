@@ -6,7 +6,7 @@ import {
   runCommand,
 } from "./src/common.js";
 import { themeText, commonUrl } from "./src/Constants.js";
-import { renameAndroidProject } from "./src/renameproject/RenameAndroid.js";
+import { renameAndroidProject } from "./src/rename/Rename.js";
 import {
   initialiseRNProjectInWindowsAndDeleteApptsxFile,
   createWindowsFolderStructureForMinimalProject,
@@ -341,7 +341,6 @@ switch (command) {
 
   case "rename":
     const userCommand = args.slice(1).join(" ");
-    console.log("valuuee", userCommand);
     renameAndroidProject({ userCommand });
 
     break;
