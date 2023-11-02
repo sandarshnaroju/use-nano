@@ -6,6 +6,7 @@ import {
   runCommand,
 } from "./src/common.js";
 import { themeText, commonUrl } from "./src/Constants.js";
+import { renameAndroidProject } from "./src/renameproject/RenameAndroid.js";
 import {
   initialiseRNProjectInWindowsAndDeleteApptsxFile,
   createWindowsFolderStructureForMinimalProject,
@@ -102,9 +103,7 @@ const initialiseReactNativeProjectAndDeleteApptsxFile = ({
   reactNativeVers,
 }) => {
   const RNversionString =
-    reactNativeVers != null
-      ? `--version ${reactNativeVers}`
-      : "--version 0.71.3";
+    reactNativeVers != null ? `--version ${reactNativeVers}` : "";
 
   const reactnativeinstall = `npx react-native init ${repoName} ${RNversionString}`;
   const checkedOut = runCommand(reactnativeinstall);
@@ -338,6 +337,13 @@ switch (command) {
           // Something else went wrong
         }
       });
+    break;
+
+  case "rename":
+    const userCommand = args.slice(1).join(" ");
+    console.log("valuuee", userCommand);
+    renameAndroidProject({ userCommand });
+
     break;
   default:
     console.log(

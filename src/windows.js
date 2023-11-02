@@ -10,9 +10,7 @@ export const initialiseRNProjectInWindowsAndDeleteApptsxFile = ({
   reactNativeVers,
 }) => {
   const RNversionString =
-    reactNativeVers != null
-      ? `--version ${reactNativeVers}`
-      : "--version 0.71.3";
+    reactNativeVers != null ? `--version ${reactNativeVers}` : "";
   const reactnativeinstall = `npx react-native init ${repoName} ${RNversionString}`;
 
   const checkedOut = runCommand(reactnativeinstall);
