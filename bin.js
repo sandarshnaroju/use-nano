@@ -2,10 +2,15 @@
 
 import inquirer from "inquirer";
 import {
+  downloadFileAtPathGiven,
   getNanoVersionAndReactNativeVersion,
+  moveFile,
   runCommand,
 } from "./src/common.js";
 import { themeText, commonUrl } from "./src/Constants.js";
+import { setupAndroidIcons } from "./src/icons/AndroidIcons.js";
+import { setupIosIcons } from "./src/icons/IosIcons.js";
+import { createLauncherIcon } from "./src/launcherIcon/createLauncherIcons.js";
 import { renameAndroidProject } from "./src/rename/Rename.js";
 import {
   initialiseRNProjectInWindowsAndDeleteApptsxFile,
@@ -42,14 +47,24 @@ const addNanoConfigToExistingProject = (repoName, id, secret, appUrl) => {
 };
 
 const createFolderStructureForMinimalProject = () => {
-  const downloadAppjsCommand = `cd ${repoName} && curl -s -S -LJO ${commonUrl}App2.js > /dev/null  && mv App2.js App.js`;
-  const downloadresult = runCommand(downloadAppjsCommand);
-  if (!downloadresult) process.exit(-1);
+  // const downloadAppjsCommand = `cd ${repoName} && curl -s -S -LJO ${commonUrl}App2.js > /dev/null  && mv App2.js App.js`;
+  // const downloadresult = runCommand(downloadAppjsCommand);
+  // if (!downloadresult) process.exit(-1);
+  downloadFileAtPathGiven({ path: repoName, url: commonUrl + "App2.js" });
+  moveFile({ path: repoName, source: "App2.js", destination: "App.js" });
+  // const downloadAppjsCommand = `cd ${repoName} &&  mv App2.js App.js`;
+  // const downloadresult = runCommand(downloadAppjsCommand);
+  // if (!downloadresult) process.exit(-1);
 };
 const createFolderStructureWithDefaultLoadingScreen = () => {
-  const downloadAppjsCommand = `cd ${repoName} && curl -s -S -LJO ${commonUrl}App3.js > /dev/null  && mv App3.js App.js`;
-  const downloadresult = runCommand(downloadAppjsCommand);
-  if (!downloadresult) process.exit(-1);
+  // const downloadAppjsCommand = `cd ${repoName} && curl -s -S -LJO ${commonUrl}App3.js > /dev/null  && mv App3.js App.js`;
+  // const downloadresult = runCommand(downloadAppjsCommand);
+  // if (!downloadresult) process.exit(-1);
+  downloadFileAtPathGiven({ path: repoName, url: commonUrl + "App3.js" });
+  moveFile({ path: repoName, source: "App3.js", destination: "App.js" });
+  // const downloadAppjsCommand = `cd ${repoName} && mv App3.js App.js`;
+  // const downloadresult = runCommand(downloadAppjsCommand);
+  // if (!downloadresult) process.exit(-1);
 };
 
 // const changeJavaFilesForFirebase = ({ repoName }) => {
@@ -93,7 +108,14 @@ const changeJavaFilesForVectorIcons = ({ repoName }) => {
 
   const delComman = runCommand(deleteAppt);
   if (!delComman) process.exit(-1);
-  const downloadFontsZipCommand = `cd ${repoName}/android/app/src/main && curl -s -S -LJO ${commonUrl}assets.zip > /dev/null  && unzip assets.zip > /dev/null  &&  rm -rf assets.zip`;
+  // const downloadFontsZipCommand = `cd ${repoName}/android/app/src/main && curl -s -S -LJO ${commonUrl}assets.zip > /dev/null  && unzip assets.zip > /dev/null  &&  rm -rf assets.zip`;
+  // const downloadresult = runCommand(downloadFontsZipCommand);
+  // if (!downloadresult) process.exit(-1);
+  downloadFileAtPathGiven({
+    path: repoName + "/android/app/src/main",
+    url: commonUrl + "assets.zip",
+  });
+  const downloadFontsZipCommand = `cd ${repoName}/android/app/src/main &&  unzip assets.zip > /dev/null  &&  rm -rf assets.zip`;
   const downloadresult = runCommand(downloadFontsZipCommand);
   if (!downloadresult) process.exit(-1);
   // }
@@ -342,6 +364,29 @@ switch (command) {
   case "rename":
     const userCommand = args.slice(1).join(" ");
     renameAndroidProject({ userCommand });
+
+    break;
+
+  case "icons":
+    const platform = args.slice(1);
+    switch (platform) {
+      case "android":
+        setupAndroidIcons();
+
+        break;
+      case "ios":
+        setupIosIcons();
+        break;
+
+      default:
+        break;
+    }
+
+    break;
+
+  case "launcher-icon":
+    const launcherIconArgs = args.slice(1).join(" ");
+    createLauncherIcon({ userCommand: launcherIconArgs });
 
     break;
   default:
