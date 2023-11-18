@@ -132,6 +132,7 @@ export const installWindowsRequiredPackagesInRNProject = async ({
 const createFolderStructureWithDefaultLoadingScreenInWindows = ({
   repoName,
 }) => {
+  downloadFileAtPathGiven;
   const downloadAppjsCommand = `CD ${repoName} && curl -s -S -LJO ${commonUrl}App3.js  && ren App3.js App.js`;
   const downloadresult = runCommand(downloadAppjsCommand);
   if (!downloadresult) process.exit(-1);

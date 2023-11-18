@@ -2,7 +2,7 @@ import { execSync } from "child_process";
 import { COMMAND_ARGUMENTS } from "./Constants.js";
 export const runCommand = (command) => {
   try {
-    execSync(`${command}`, { stdio: "inherit" });
+    execSync(`${command}`);
   } catch (e) {
     console.error(`Failed to execute ${command}`, e);
     return false;
@@ -47,4 +47,20 @@ export const getNanoVersionAndReactNativeVersion = ({
     }
   }
   return [null, null];
+};
+
+export const downloadFileAtPathGiven = ({ url, path }) => {
+  const downloadAppjsCommand = `cd ${path} && curl -s -S -LJO ${url} > /dev/null  `;
+  const downloadresult = runCommand(downloadAppjsCommand);
+  if (!downloadresult) process.exit(-1);
+};
+export const moveFile = ({ path, source, destination }) => {
+  let downloadAppjsCommand = "";
+  if (path) {
+    downloadAppjsCommand = `cd ${path} && mv ${source} ${destination}`;
+  } else {
+    downloadAppjsCommand = `mv ${source} ${destination}`;
+  }
+  const downloadresult = runCommand(downloadAppjsCommand);
+  if (!downloadresult) process.exit(-1);
 };
