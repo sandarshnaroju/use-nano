@@ -37,9 +37,9 @@ const createNanoConfigForWindows = (repoName, id, secret) => {
   let createNanoConfigCommand = ``;
 
   if (id != null && secret != null) {
-    createNanoConfigCommand = `export const CLIENT_ID = '${id}'; \nexport const CLIENT_SECRET = '${secret}'; \nexport const RELOAD_TIME = 10000; \n ${themeText}   \nexport const DataBaseConfig = { \n // schema:"your schema object" , \n // schemaVersion: "", \n} ;   `;
+    createNanoConfigCommand = `export const LOAD_PRIORITY = "dynamic"; \n export const CLIENT_ID = '${id}'; \nexport const CLIENT_SECRET = '${secret}'; \nexport const RELOAD_TIME = 10000; \n ${themeText}   \nexport const DataBaseConfig = { \n // schema:"your schema object" , \n // schemaVersion: "", \n} ;   `;
   } else {
-    createNanoConfigCommand = `export const CLIENT_ID = "id"; \nexport const CLIENT_SECRET = "secret"; \nexport const RELOAD_TIME = 10000; \n ${themeText}  \nexport const DataBaseConfig = { \n // schema:"your schema object" , \n // schemaVersion: "", \n} ;   `;
+    createNanoConfigCommand = `export const LOAD_PRIORITY = "static"; \n export const CLIENT_ID = "id"; \nexport const CLIENT_SECRET = "secret"; \nexport const RELOAD_TIME = 10000; \n ${themeText}  \nexport const DataBaseConfig = { \n // schema:"your schema object" , \n // schemaVersion: "", \n} ;   `;
   }
 
   const nanoConfigPath = path.join(repoName, "nano.config.js");
@@ -112,13 +112,11 @@ export const installWindowsRequiredPackagesInRNProject = async ({
   isSyncFunctionalityRequired = false,
   nanoversion = null,
 }) => {
-  // const firebaseCommands = isSyncFunctionalityRequired
-  //   ? "@react-native-firebase/app @react-native-firebase/messaging "
-  //   : "";
+  const syncCommand = isSyncFunctionalityRequired ? "rn-nano-sync " : "";
   const nanoVer =
     nanoversion != null && nanoversion != "" ? `@${nanoversion}` : "";
 
-  const installScreensAndSafeArea = `CD ${repoName} && npm install --save react-native-nano${nanoVer} react-native-rsa-native react-native-permissions react-native-safe-area-context react-native-screens realm@11.5.2 @notifee/react-native react-native-pager-view react-native-device-info react-native-image-crop-picker run `;
+  const installScreensAndSafeArea = `CD ${repoName} && npm install --save react-native-nano${nanoVer} react-native-rsa-native react-native-permissions react-native-safe-area-context react-native-screens realm@11.5.2 @notifee/react-native react-native-pager-view react-native-device-info react-native-image-crop-picker ${syncCommand} run `;
   const installScreensAndSafeAreaResult = runCommand(installScreensAndSafeArea);
   if (!installScreensAndSafeAreaResult) process.exit(-1);
   createNanoConfigForWindows(repoName, appId, appSecret);
@@ -155,6 +153,7 @@ export const setUpANewProjectWithDefaultLoadingScreenForWindows = ({
     appId,
     appSecret,
     nanoversion,
+    isSyncFunctionalityRequired: true,
   });
 };
 
