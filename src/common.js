@@ -73,10 +73,8 @@ export const getKeystorePathAndPasswordArray = ({
   secondArgValue,
 }) => {
   // returns [keystorepath, password]
-  console.log("INITITI", secondArgCommand, secondArgValue);
 
   if (secondArgCommand != null && secondArgValue != null) {
-    console.log("FIRST ARG",firstArgCommand, KEYSTORE_ARGUMENTS.PATH );
     if (firstArgCommand == KEYSTORE_ARGUMENTS.PATH) {
       if (secondArgCommand == KEYSTORE_ARGUMENTS.PASSWORD) {
         // provided both
