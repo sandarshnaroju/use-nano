@@ -121,9 +121,7 @@ export const installWindowsRequiredPackagesInRNProject = async ({
   if (!installScreensAndSafeAreaResult) process.exit(-1);
   createNanoConfigForWindows(repoName, appId, appSecret);
   await changeJavaFilesForVectorIcons({ repoName });
-  // if (isSyncFunctionalityRequired) {
-  //   changeJavaFilesForFirebase({ repoName });
-  // }
+ 
   console.log("Welcome to Nano");
 };
 

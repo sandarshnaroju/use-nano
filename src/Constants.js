@@ -26,3 +26,8 @@ export const COMMAND_ARGUMENTS = {
   NANO_VERSION: "--nano-version",
   REACT_NATIVE_VERSION: "--react-native-version",
 };
+
+export const KEYSTORE_ARGUMENTS = {
+  PATH: "--keystore",
+  PASSWORD: "--keystorepassword",
+};

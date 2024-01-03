@@ -1,5 +1,5 @@
-import { execSync } from "child_process";
-import { COMMAND_ARGUMENTS } from "./Constants.js";
+import { execSync, exec } from "child_process";
+import { COMMAND_ARGUMENTS,KEYSTORE_ARGUMENTS } from "./Constants.js";
 export const runCommand = (command) => {
   try {
     execSync(`${command}`);
@@ -63,4 +63,47 @@ export const moveFile = ({ path, source, destination }) => {
   }
   const downloadresult = runCommand(downloadAppjsCommand);
   if (!downloadresult) process.exit(-1);
+};
+
+
+export const getKeystorePathAndPasswordArray = ({
+  firstArgCommand,
+  firstArgValue,
+  secondArgCommand,
+  secondArgValue,
+}) => {
+  // returns [keystorepath, password]
+  console.log("INITITI", secondArgCommand, secondArgValue);
+
+  if (secondArgCommand != null && secondArgValue != null) {
+    console.log("FIRST ARG",firstArgCommand, KEYSTORE_ARGUMENTS.PATH );
+    if (firstArgCommand == KEYSTORE_ARGUMENTS.PATH) {
+      if (secondArgCommand == KEYSTORE_ARGUMENTS.PASSWORD) {
+        // provided both
+        return [firstArgValue, secondArgValue];
+      } else {
+        return [firstArgValue, null];
+      }
+    } else if (firstArgCommand == KEYSTORE_ARGUMENTS.PASSWORD) {
+      if (secondArgCommand == KEYSTORE_ARGUMENTS.PATH) {
+        return [secondArgValue, firstArgValue];
+      } else {
+        return [null, firstArgValue];
+      }
+    }
+  } else {
+    // only one param is given i.e first param
+    if (firstArgCommand == KEYSTORE_ARGUMENTS.PATH) {
+      // provided only PATH
+      return [firstArgValue, null];
+    } else if (firstArgCommand == KEYSTORE_ARGUMENTS.PASSWORD) {
+      // provided only password
+
+      return [null, firstArgValue];
+    } else {
+      // provided none
+      return [null, null];
+    }
+  }
+  return [null, null];
 };

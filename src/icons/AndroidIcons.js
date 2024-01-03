@@ -10,9 +10,7 @@ export const setupAndroidIcons = () => {
 
   const delComman = runCommand(deleteAppt);
   if (!delComman) process.exit(-1);
-  // const downloadFontsZipCommand = `cd android/app/src/main && curl -s -S -LJO ${commonUrl}assets.zip > /dev/null  && unzip assets.zip > /dev/null  &&  rm -rf assets.zip`;
-  // const downloadresult = runCommand(downloadFontsZipCommand);
-  // if (!downloadresult) process.exit(-1);
+
   downloadFileAtPathGiven({
     path: "android/app/src/main",
     url: commonUrl + "assets.zip",
