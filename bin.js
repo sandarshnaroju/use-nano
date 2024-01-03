@@ -3,6 +3,7 @@
 import inquirer from "inquirer";
 import {
   downloadFileAtPathGiven,
+  getKeystorePathAndPasswordArray,
   getNanoVersionAndReactNativeVersion,
   moveFile,
   runCommand,
@@ -19,6 +20,13 @@ import {
   setUpANewProjectWithDefaultLoadingScreenForWindows,
   addNanoConfigToExistingWindowsProject,
 } from "./src/windows.js";
+import {
+  askUserInfoToGenerateKeyStoreFile,
+  generateAabWhenKeyStoreExists,
+  generateApkWhenKeyStoreExists,
+  generateDebugAabWhenKeyStoreExists,
+  generateDebugApkWhenKeyStoreExists,
+} from "./src/apprelease/AndroidRelease.js";
 
 const createNanoConfig = (repoName, id, secret) => {
   let clientIdCommand = "";
@@ -47,58 +55,14 @@ const addNanoConfigToExistingProject = (repoName, id, secret, appUrl) => {
 };
 
 const createFolderStructureForMinimalProject = () => {
-  // const downloadAppjsCommand = `cd ${repoName} && curl -s -S -LJO ${commonUrl}App2.js > /dev/null  && mv App2.js App.js`;
-  // const downloadresult = runCommand(downloadAppjsCommand);
-  // if (!downloadresult) process.exit(-1);
   downloadFileAtPathGiven({ path: repoName, url: commonUrl + "App2.js" });
   moveFile({ path: repoName, source: "App2.js", destination: "App.js" });
-  // const downloadAppjsCommand = `cd ${repoName} &&  mv App2.js App.js`;
-  // const downloadresult = runCommand(downloadAppjsCommand);
-  // if (!downloadresult) process.exit(-1);
 };
 const createFolderStructureWithDefaultLoadingScreen = () => {
-  // const downloadAppjsCommand = `cd ${repoName} && curl -s -S -LJO ${commonUrl}App3.js > /dev/null  && mv App3.js App.js`;
-  // const downloadresult = runCommand(downloadAppjsCommand);
-  // if (!downloadresult) process.exit(-1);
   downloadFileAtPathGiven({ path: repoName, url: commonUrl + "App3.js" });
   moveFile({ path: repoName, source: "App3.js", destination: "App.js" });
-  // const downloadAppjsCommand = `cd ${repoName} && mv App3.js App.js`;
-  // const downloadresult = runCommand(downloadAppjsCommand);
-  // if (!downloadresult) process.exit(-1);
 };
 
-// const changeJavaFilesForFirebase = ({ repoName }) => {
-//   //ANdroid
-//   const deleteAppts = `cd ${repoName}/android/app/ && echo 'apply plugin: "com.google.gms.google-services"' >> build.gradle`;
-//   const delCommand = runCommand(deleteAppts);
-//   if (!delCommand) process.exit(-1);
-
-//   const buildg = `cd ${repoName}/android/ && awk '/ dependencies/{print; print "classpath \\"com.google.gms:google-services:4.3.15\\""} !/ dependencies/' build.gradle > temp && mv temp build.gradle `;
-//   const buildgCom = runCommand(buildg);
-//   if (!buildgCom) process.exit(-1);
-
-//   if (process.platform === "darwin") {
-//     /// IOS
-//     const importfirebase = `cd ${repoName}/ios/${repoName}/ && awk '/#import "AppDelegate.h"/{print; print "#import <Firebase.h>"} !/#import "AppDelegate.h"/' AppDelegate.mm > temp && mv temp AppDelegate.mm`;
-//     const delComman = runCommand(importfirebase);
-//     if (!delComman) process.exit(-1);
-//     const initfirebase = `cd ${repoName}/ios/${repoName}/ && awk '/self.moduleName = @"${repoName}";/{print; print "[FIRApp configure];"} !/self.moduleName = @"${repoName}";/' AppDelegate.mm > temp && mv temp AppDelegate.mm `;
-//     const initfirebaseComm = runCommand(initfirebase);
-//     if (!initfirebaseComm) process.exit(-1);
-//     const podfile = `cd ${repoName}/ios/ && awk '/ config = use_native_modules!/{print; print " use_frameworks! :linkage => :static"} !/config = use_native_modules!/' Podfile > temp && mv temp Podfile `;
-//     const podfileCom = runCommand(podfile);
-//     if (!podfileCom) process.exit(-1);
-
-//     const enablestaticfrmework = `cd ${repoName}/ios/ && awk '/ use_frameworks! :linkage => :static/{print; print "$RNFirebaseAsStaticFramework = true"} !/ use_frameworks! :linkage => :static/' Podfile > temp && mv temp Podfile `;
-//     const enablestaticfrmeworkComm = runCommand(enablestaticfrmework);
-//     if (!enablestaticfrmeworkComm) process.exit(-1);
-
-//     const podInstall = `cd ${repoName}/ios/ && pod install --repo-update`;
-//     const podInstallComm = runCommand(podInstall);
-//     if (!podInstallComm) process.exit(-1);
-//   }
-
-// };
 const changeJavaFilesForVectorIcons = ({ repoName }) => {
   const deleteAppts = `cd ${repoName}/android/ && echo "include ':react-native-vector-icons'
     project(':react-native-vector-icons').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-vector-icons/android')" >> settings.gradle`;
@@ -108,9 +72,7 @@ const changeJavaFilesForVectorIcons = ({ repoName }) => {
 
   const delComman = runCommand(deleteAppt);
   if (!delComman) process.exit(-1);
-  // const downloadFontsZipCommand = `cd ${repoName}/android/app/src/main && curl -s -S -LJO ${commonUrl}assets.zip > /dev/null  && unzip assets.zip > /dev/null  &&  rm -rf assets.zip`;
-  // const downloadresult = runCommand(downloadFontsZipCommand);
-  // if (!downloadresult) process.exit(-1);
+
   downloadFileAtPathGiven({
     path: repoName + "/android/app/src/main",
     url: commonUrl + "assets.zip",
@@ -118,7 +80,6 @@ const changeJavaFilesForVectorIcons = ({ repoName }) => {
   const downloadFontsZipCommand = `cd ${repoName}/android/app/src/main &&  unzip assets.zip > /dev/null  &&  rm -rf assets.zip`;
   const downloadresult = runCommand(downloadFontsZipCommand);
   if (!downloadresult) process.exit(-1);
-  // }
 };
 const initialiseReactNativeProjectAndDeleteApptsxFile = ({
   repoName,
@@ -152,9 +113,7 @@ const npmInstallRequiredPackagesInRNProject = ({
   if (!installScreensAndSafeAreaResult) process.exit(-1);
   createNanoConfig(repoName, appId, appSecret);
   changeJavaFilesForVectorIcons({ repoName });
-  // if (isSyncFunctionalityRequired) {
-  //   changeJavaFilesForFirebase({ repoName });
-  // }
+
   console.log("Welcome to Nano");
 };
 
@@ -307,10 +266,10 @@ switch (command) {
           message: "What kind of project do you want?",
           choices: [
             { name: "a) Simple Hello World project ", value: "a" },
-            // { name: "b) Basic project with starter template", value: "b" },
+
             {
               name: "b) Connect to existing project at nanoapp.dev",
-              value: "c",
+              value: "b",
             },
           ],
         },
@@ -335,16 +294,14 @@ switch (command) {
                 reactNativeVers: versionValuesArray[1],
               });
               break;
-            // case "b":
-            //   setUpANewProject({ repoName: repoName });
-            //   break;
-            case "c":
+
+            case "b":
               createProjectWithSyncEnabled({
                 projectName: repoName,
                 nanoversion: versionValuesArray[0],
                 reactNativeVers: versionValuesArray[1],
               });
-              // changeJavaFilesForVectorIcons({ repoName });
+            
               break;
             default:
               break;
@@ -386,6 +343,83 @@ switch (command) {
   case "launcher-icon":
     const launcherIconArgs = args.slice(1).join(" ");
     createLauncherIcon({ userCommand: launcherIconArgs });
+
+    break;
+  case "generate-keystore-file":
+    askUserInfoToGenerateKeyStoreFile();
+
+    break;
+  case "generate-apk":
+    const keyStorePath = args.slice(1);
+    // npx rn-nano generate-apk release/debug --keystore <keystore file path> --keystorepassword <keystore password >
+    if (
+      keyStorePath[0] != null &&
+      (keyStorePath[0] == "release" || keyStorePath[0] == "debug")
+    ) {
+      const pathPassArray = getKeystorePathAndPasswordArray({
+        firstArgCommand: keyStorePath[1],
+        firstArgValue: keyStorePath[2],
+        secondArgCommand: keyStorePath[3],
+        secondArgValue: keyStorePath[4],
+      });
+
+      if (
+        pathPassArray != null &&
+        pathPassArray[0] != null &&
+        pathPassArray[1] != null
+      ) {
+        if (keyStorePath[0] == "release") {
+          generateApkWhenKeyStoreExists({
+            keyStoreName: pathPassArray[0],
+            keyStorePassword: pathPassArray[1],
+          });
+        }
+
+        if (keyStorePath[0] == "debug") {
+          generateDebugApkWhenKeyStoreExists({
+            keyStoreName: pathPassArray[0],
+            keyStorePassword: pathPassArray[1],
+          });
+        }
+      }
+    }
+
+    break;
+  case "generate-aab":
+    const keyStorePat = args.slice(1);
+    // npx rn-nano generate-aab release/debug --keystore <keystore file path> --keystorepassword <keystore password >
+
+    if (
+      keyStorePat[0] != null &&
+      (keyStorePat[0] == "release" || keyStorePat[0] == "debug")
+    ) {
+      const pathPassArray = getKeystorePathAndPasswordArray({
+        firstArgCommand: keyStorePat[1],
+        firstArgValue: keyStorePat[2],
+        secondArgCommand: keyStorePat[3],
+        secondArgValue: keyStorePat[4],
+      });
+
+      if (
+        pathPassArray != null &&
+        pathPassArray[0] != null &&
+        pathPassArray[1] != null
+      ) {
+        if (keyStorePat[0] == "release") {
+          generateAabWhenKeyStoreExists({
+            keyStoreName: pathPassArray[0],
+            keyStorePassword: pathPassArray[1],
+          });
+        }
+
+        if (keyStorePat[0] == "debug") {
+          generateDebugAabWhenKeyStoreExists({
+            keyStoreName: pathPassArray[0],
+            keyStorePassword: pathPassArray[1],
+          });
+        }
+      }
+    }
 
     break;
   default:
