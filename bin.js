@@ -493,7 +493,7 @@ switch (command) {
     }
 
     break;
-  default:
+  default:""
     console.log(
       "To create a new Nano project use \n npx rn-nano init myawesomeproject "
     );
