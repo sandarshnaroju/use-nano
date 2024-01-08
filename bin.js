@@ -8,6 +8,10 @@ import {
   moveFile,
   runCommand,
 } from "./src/common.js";
+// const yargs = require("yargs/yargs");
+import yargs from "yargs/yargs";
+import { hideBin } from "yargs/helpers";
+
 import { themeText, commonUrl } from "./src/Constants.js";
 import { setupAndroidIcons } from "./src/icons/AndroidIcons.js";
 import { setupIosIcons } from "./src/icons/IosIcons.js";
@@ -301,7 +305,7 @@ switch (command) {
                 nanoversion: versionValuesArray[0],
                 reactNativeVers: versionValuesArray[1],
               });
-            
+
               break;
             default:
               break;
@@ -351,34 +355,32 @@ switch (command) {
     break;
   case "generate-apk":
     const keyStorePath = args.slice(1);
-    // npx rn-nano generate-apk release/debug --keystore <keystore file path> --keystorepassword <keystore password >
+    // npx rn-nano generate-apk release/debug --keystore <keystore file path> --keystorepassword <keystore password --generatedaab <name.aab> >
     if (
       keyStorePath[0] != null &&
       (keyStorePath[0] == "release" || keyStorePath[0] == "debug")
     ) {
-      const pathPassArray = getKeystorePathAndPasswordArray({
-        firstArgCommand: keyStorePath[1],
-        firstArgValue: keyStorePath[2],
-        secondArgCommand: keyStorePath[3],
-        secondArgValue: keyStorePath[4],
-      });
+      const argv = yargs(hideBin(process.argv)).argv;
 
       if (
-        pathPassArray != null &&
-        pathPassArray[0] != null &&
-        pathPassArray[1] != null
+        argv != null &&
+        argv.keystore != null &&
+        argv.keystorepassword != null &&
+        argv.generatedapk != null
       ) {
         if (keyStorePath[0] == "release") {
           generateApkWhenKeyStoreExists({
-            keyStoreName: pathPassArray[0],
-            keyStorePassword: pathPassArray[1],
+            keyStoreName: argv.keystore,
+            keyStorePassword: argv.keystorepassword,
+            generatedApkName: argv.generatedapk,
           });
         }
 
         if (keyStorePath[0] == "debug") {
           generateDebugApkWhenKeyStoreExists({
-            keyStoreName: pathPassArray[0],
-            keyStorePassword: pathPassArray[1],
+            keyStoreName: argv.keystore,
+            keyStorePassword: argv.keystorepassword,
+            generatedApkName: argv.generatedapk,
           });
         }
       }
@@ -393,29 +395,98 @@ switch (command) {
       keyStorePat[0] != null &&
       (keyStorePat[0] == "release" || keyStorePat[0] == "debug")
     ) {
-      const pathPassArray = getKeystorePathAndPasswordArray({
-        firstArgCommand: keyStorePat[1],
-        firstArgValue: keyStorePat[2],
-        secondArgCommand: keyStorePat[3],
-        secondArgValue: keyStorePat[4],
-      });
+      const argv = yargs(hideBin(process.argv)).argv;
 
       if (
-        pathPassArray != null &&
-        pathPassArray[0] != null &&
-        pathPassArray[1] != null
+        argv != null &&
+        argv.keystore != null &&
+        argv.keystorepassword != null &&
+        argv.generatedaab != null
       ) {
         if (keyStorePat[0] == "release") {
           generateAabWhenKeyStoreExists({
-            keyStoreName: pathPassArray[0],
-            keyStorePassword: pathPassArray[1],
+            keyStoreName: argv.keystore,
+            keyStorePassword: argv.keystorepassword,
+            generatedAabName: argv.generatedaab,
           });
         }
 
         if (keyStorePat[0] == "debug") {
           generateDebugAabWhenKeyStoreExists({
-            keyStoreName: pathPassArray[0],
-            keyStorePassword: pathPassArray[1],
+            keyStoreName: argv.keystore,
+            keyStorePassword: argv.keystorepassword,
+            generatedAabName: argv.generatedaab,
+          });
+        }
+      }
+    }
+
+    break;
+  case "build":
+    // npx rn-nano build --rename <newname> --packagename <newpackage> --launchericon <launcherIconPath> --keystorefile <keystore file>
+    // npx rn-nano --generateapk release/debug --generatedapkname <apkname.apk> --keystore <keystore file path> --keystorepassword <keystore password >
+    // npx rn-nano --generateaab release/debug --generatedaabname <apkname.aab> --keystore <keystore file path> --keystorepassword <keystore password >
+
+    const argv = yargs(hideBin(process.argv)).argv;
+    if (argv) {
+      if (argv.rename && typeof argv.rename == "string") {
+        console.log("Renaming project to ", argv.rename);
+        let command = `"${argv.rename}"`;
+        if (argv.packagename && typeof argv.packagename == "string") {
+          command = command + ` -b "${argv.packagename}"`;
+        }
+        renameAndroidProject({ userCommand: command });
+      }
+      if (argv.launchericon && typeof argv.launchericon == "string") {
+        createLauncherIcon({ userCommand: `create ${argv.launchericon}` });
+      }
+      if (
+        argv.generateapk &&
+        typeof argv.generateapk == "string" &&
+        argv.keystore &&
+        typeof argv.keystore == "string" &&
+        argv.keystorepassword &&
+        typeof argv.keystorepassword == "string" &&
+        argv.generatedapkname &&
+        typeof argv.generatedapkname == "string"
+      ) {
+        if (argv.generateapk === "release") {
+          generateApkWhenKeyStoreExists({
+            keyStoreName: argv.keystore,
+            keyStorePassword: argv.keystorepassword,
+            generatedApkName: argv.generatedapkname,
+          });
+        }
+        if (argv.generateapk === "debug") {
+          generateDebugApkWhenKeyStoreExists({
+            keyStoreName: argv.keystore,
+            keyStorePassword: argv.keystorepassword,
+            generatedApkName: argv.generatedapkname,
+          });
+        }
+      }
+      if (
+        argv.generateaab &&
+        typeof argv.generateaab == "string" &&
+        argv.keystore &&
+        typeof argv.keystore == "string" &&
+        argv.keystorepassword &&
+        typeof argv.keystorepassword == "string" &&
+        argv.generatedaabname &&
+        typeof argv.generatedaabname == "string"
+      ) {
+        if (argv.generateapk === "release") {
+          generateAabWhenKeyStoreExists({
+            keyStoreName: argv.keystore,
+            keyStorePassword: argv.keystorepassword,
+            generatedAabName: argv.generatedaabname,
+          });
+        }
+        if (argv.generateapk === "debug") {
+          generateDebugAabWhenKeyStoreExists({
+            keyStoreName: argv.keystore,
+            keyStorePassword: argv.keystorepassword,
+            generatedAabName: argv.generatedaabname,
           });
         }
       }
