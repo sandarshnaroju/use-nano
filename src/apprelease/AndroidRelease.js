@@ -31,6 +31,16 @@ export const askUserInfoToGenerateKeyStoreFile = () => {
       },
       {
         type: "input",
+        name: "algorithm",
+        message: "Enter Key Algorithm",
+      },
+      {
+        type: "input",
+        name: "keysize",
+        message: "Enter key size",
+      },
+      {
+        type: "input",
         name: "store_pass",
         message: "Enter store password",
       },
@@ -67,7 +77,9 @@ export const askUserInfoToGenerateKeyStoreFile = () => {
         answers["cn"] != null &&
         answers["ou"] != null &&
         answers["org"] != null &&
-        answers["country"] != null
+        answers["country"] != null &&
+        answers["algorithm"] != null &&
+        answers["keysize"] != null
       ) {
         const generatedDname = `"cn=${answers["cn"]}, ou=${answers["ou"]}, o=${answers["org"]}, c=${answers["country"]}"`;
         // keyStoreName = answers["keystore_path"];
@@ -75,8 +87,8 @@ export const askUserInfoToGenerateKeyStoreFile = () => {
           alias: answers["alias"],
           aliasPassword: answers["alias_password"],
           dName: generatedDname,
-          keyAlgorithm: "RSA",
-          keySize: 2048,
+          keyAlgorithm: answers["algorithm"],
+          keySize: answers["keysize"],
           keystoreFileName: answers["keystore_path"],
           keyStorepassword: answers["store_pass"],
           validity: answers["validity"],
@@ -112,6 +124,7 @@ export const generateKeyStoreFile = ({
 export const generateApkWhenKeyStoreExists = ({
   keyStoreName,
   keyStorePassword,
+  generatedApkName,
 }) => {
   console.log("Generating unsigned release apk");
   generateUnsignedReleaseApk();
@@ -122,22 +135,24 @@ export const generateApkWhenKeyStoreExists = ({
     alignedUnsignedApkName: "zipAlignedUnSignedRelease.apk",
   });
 
+  console.log("GENERATING APKKKK", generatedApkName);
   generateSignedApk({
     keyStoreFile: keyStoreName,
-    signedApkName: "signedRelease.apk",
+    signedApkName: generatedApkName,
     unsignedApk: "android/unSignedRelease.apk",
     password: keyStorePassword,
   });
   console.log("verifying release apk ");
 
-  verifySignedApk({ signedApkFile: "signedRelease.apk" });
+  verifySignedApk({ signedApkFile: generatedApkName });
 
   cleanupAfterGenerating();
-  console.log(" Release apk : signedRelease.apk is generated")
+  console.log(` Release apk : ${generatedApkName} is generated`);
 };
 export const generateDebugApkWhenKeyStoreExists = ({
   keyStoreName,
   keyStorePassword,
+  generatedApkName,
 }) => {
   console.log("Generating unsigned debug apk");
   generateUnsignedDebugApk();
@@ -147,21 +162,19 @@ export const generateDebugApkWhenKeyStoreExists = ({
     unSignedApk: "unSignedDebug.apk",
     alignedUnsignedApkName: "zipAlignedUnSignedDebug.apk",
   });
- 
 
   generateSignedApk({
     keyStoreFile: keyStoreName,
-    signedApkName: "signedDebug.apk",
+    signedApkName: generatedApkName,
     unsignedApk: "android/unSignedDebug.apk",
     password: keyStorePassword,
   });
   console.log("verifying debug apk ");
 
-  verifySignedApk({ signedApkFile: "signedDebug.apk" });
+  verifySignedApk({ signedApkFile: generatedApkName });
 
   cleanupAfterGenerating();
-  console.log(" Debug apk : signedDebug.apk is generated")
-
+  console.log(` Debug apk : ${generatedApkName} is generated`);
 };
 
 export const initialiseApkGeneration = () => {
@@ -283,6 +296,7 @@ const cleanupAabsAfterGenerating = () => {
 export const generateDebugAabWhenKeyStoreExists = ({
   keyStoreName,
   keyStorePassword,
+  generatedAabName,
 }) => {
   console.log("Generating unsigned debug aab");
   generateUnsignedDebugAab();
@@ -295,20 +309,19 @@ export const generateDebugAabWhenKeyStoreExists = ({
 
   generateSignedAab({
     keyStoreFile: keyStoreName,
-    signedAabName: "signedDebug.aab",
+    signedAabName: generatedAabName,
     unsignedAab: "android/zipAlignedUnSignedDebug.aab",
     password: keyStorePassword,
   });
 
-
   cleanupAabsAfterGenerating();
-  console.log(" Debug aab : signedDebug.aab is generated")
-
+  console.log(` Debug aab : ${generatedAabName} is generated`);
 };
 
 export const generateAabWhenKeyStoreExists = ({
   keyStoreName,
   keyStorePassword,
+  generatedAabName,
 }) => {
   console.log("Generating unsigned release aab");
   generateUnsignedReleaseAab();
@@ -321,13 +334,11 @@ export const generateAabWhenKeyStoreExists = ({
 
   generateSignedAab({
     keyStoreFile: keyStoreName,
-    signedAabName: "signedRelease.aab",
+    signedAabName: generatedAabName,
     unsignedAab: "android/zipAlignedUnSignedRelease.aab",
     password: keyStorePassword,
   });
 
-
   cleanupAabsAfterGenerating();
-  console.log(" Debug aab : signedRelease.aab is generated")
-
+  console.log(`Debug aab : ${generatedAabName} is generated`);
 };
