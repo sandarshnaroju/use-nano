@@ -111,7 +111,7 @@ const npmInstallRequiredPackagesInRNProject = ({
   const syncCommand = isSyncFunctionalityRequired ? "rn-nano-sync " : "";
   const nanoVer =
     nanoversion != null && nanoversion != "" ? `@${nanoversion}` : "";
-  const installScreensAndSafeArea = `cd ${repoName} && npm install --save react-native-nano${nanoVer} react-native-rsa-native react-native-permissions react-native-safe-area-context react-native-screens realm@11.5.2 @notifee/react-native react-native-pager-view react-native-device-info react-native-image-crop-picker  ${syncCommand} `;
+  const installScreensAndSafeArea = `cd ${repoName} && npm install --save react-native-nano${nanoVer} react-native-rsa-native react-native-permissions react-native-reanimated react-native-safe-area-context react-native-screens realm@11.5.2 @notifee/react-native react-native-pager-view react-native-device-info react-native-image-crop-picker  ${syncCommand} `;
   const installScreensAndSafeAreaResult = runCommand(installScreensAndSafeArea);
 
   if (!installScreensAndSafeAreaResult) process.exit(-1);
@@ -423,20 +423,26 @@ switch (command) {
 
     break;
   case "build":
-    // npx rn-nano build --rename <newname> --packagename <newpackage> --launchericon <launcherIconPath> --keystorefile <keystore file>
+    // npx rn-nano build --name <newname> --launchericon <launcherIconPath> --keystorefile <keystore file>
     // npx rn-nano --generateapk release/debug --generatedapkname <apkname.apk> --keystore <keystore file path> --keystorepassword <keystore password >
     // npx rn-nano --generateaab release/debug --generatedaabname <apkname.aab> --keystore <keystore file path> --keystorepassword <keystore password >
 
     const argv = yargs(hideBin(process.argv)).argv;
     if (argv) {
-      if (argv.rename && typeof argv.rename == "string") {
-        console.log("Renaming project to ", argv.rename);
-        let command = `"${argv.rename}"`;
-        if (argv.packagename && typeof argv.packagename == "string") {
-          command = command + ` -b "${argv.packagename}"`;
-        }
-        renameAndroidProject({ userCommand: command });
+      if (argv.name && typeof argv.name == "string") {
+        console.log("Creating project ", argv.name);
+        const command = `npx rn-nano init ${argv.name}`;
+        const commandRes = runCommand(command);
+        if (!commandRes) process.exit(-1);
       }
+      // if (argv.rename && typeof argv.rename == "string") {
+      //   console.log("Renaming project to ", argv.rename);
+      //   let command = `"${argv.rename}"`;
+      //   if (argv.packagename && typeof argv.packagename == "string") {
+      //     command = command + ` -b "${argv.packagename}"`;
+      //   }
+      //   renameAndroidProject({ userCommand: command });
+      // }
       if (argv.launchericon && typeof argv.launchericon == "string") {
         createLauncherIcon({ userCommand: `create ${argv.launchericon}` });
       }

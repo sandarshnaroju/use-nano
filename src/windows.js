@@ -116,7 +116,7 @@ export const installWindowsRequiredPackagesInRNProject = async ({
   const nanoVer =
     nanoversion != null && nanoversion != "" ? `@${nanoversion}` : "";
 
-  const installScreensAndSafeArea = `CD ${repoName} && npm install --save react-native-nano${nanoVer} react-native-rsa-native react-native-permissions react-native-safe-area-context react-native-screens realm@11.5.2 @notifee/react-native react-native-pager-view react-native-device-info react-native-image-crop-picker ${syncCommand} run `;
+  const installScreensAndSafeArea = `CD ${repoName} && npm install --save react-native-nano${nanoVer} react-native-rsa-native react-native-reanimated react-native-permissions react-native-safe-area-context react-native-screens realm@11.5.2 @notifee/react-native react-native-pager-view react-native-device-info react-native-image-crop-picker ${syncCommand} run `;
   const installScreensAndSafeAreaResult = runCommand(installScreensAndSafeArea);
   if (!installScreensAndSafeAreaResult) process.exit(-1);
   createNanoConfigForWindows(repoName, appId, appSecret);
