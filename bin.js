@@ -57,7 +57,13 @@ const addNanoConfigToExistingProject = (repoName, id, secret, appUrl) => {
 
   if (!clientIdCommandRes) process.exit(-1);
 };
-
+const createBabelConfigFile = () => {
+  downloadFileAtPathGiven({
+    path: repoName,
+    url: commonUrl + "babel.config.js",
+  });
+  // moveFile({ path: repoName, source: "App2.js", destination: "App.js" });
+};
 const createFolderStructureForMinimalProject = () => {
   downloadFileAtPathGiven({ path: repoName, url: commonUrl + "App2.js" });
   moveFile({ path: repoName, source: "App2.js", destination: "App.js" });
@@ -111,7 +117,7 @@ const npmInstallRequiredPackagesInRNProject = ({
   const syncCommand = isSyncFunctionalityRequired ? "rn-nano-sync " : "";
   const nanoVer =
     nanoversion != null && nanoversion != "" ? `@${nanoversion}` : "";
-  const installScreensAndSafeArea = `cd ${repoName} && npm install --save react-native-nano${nanoVer} react-native-rsa-native  react-native-reanimated react-native-safe-area-context react-native-screens realm@11.10.2 @notifee/react-native react-native-pager-view react-native-device-info react-native-image-crop-picker react-native-permissions@3.6.1 ${syncCommand} `;
+  const installScreensAndSafeArea = `cd ${repoName} && npm install --save react-native-nano${nanoVer} react-native-rsa-native  react-native-reanimated@3.6.2 react-native-safe-area-context react-native-screens realm@11.10.2 @notifee/react-native react-native-pager-view react-native-device-info react-native-image-crop-picker react-native-permissions@3.6.1 ${syncCommand} `;
   const installScreensAndSafeAreaResult = runCommand(installScreensAndSafeArea);
 
   if (!installScreensAndSafeAreaResult) process.exit(-1);
@@ -155,6 +161,7 @@ const setUpANewMinimalProject = async ({
       repoName,
       reactNativeVers,
     });
+    createBabelConfigFile();
     createWindowsFolderStructureForMinimalProject({ repoName });
     await installWindowsRequiredPackagesInRNProject({
       repoName,
@@ -167,6 +174,7 @@ const setUpANewMinimalProject = async ({
       repoName,
       reactNativeVers,
     });
+    createBabelConfigFile();
     createFolderStructureForMinimalProject();
     npmInstallRequiredPackagesInRNProject({
       repoName,
@@ -218,6 +226,7 @@ const createProjectWithSyncEnabled = ({
             nanoversion,
             reactNativeVers,
           });
+          createBabelConfigFile();
           addNanoConfigToExistingWindowsProject(
             projectName,
             answers["app_id"],
@@ -230,7 +239,7 @@ const createProjectWithSyncEnabled = ({
             nanoversion,
             reactNativeVers,
           });
-
+          createBabelConfigFile();
           addNanoConfigToExistingProject(
             projectName,
             answers["app_id"],
