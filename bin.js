@@ -111,7 +111,7 @@ const npmInstallRequiredPackagesInRNProject = ({
   const syncCommand = isSyncFunctionalityRequired ? "rn-nano-sync " : "";
   const nanoVer =
     nanoversion != null && nanoversion != "" ? `@${nanoversion}` : "";
-  const installScreensAndSafeArea = `cd ${repoName} && npm install --save react-native-nano${nanoVer} react-native-rsa-native react-native-permissions react-native-reanimated react-native-safe-area-context react-native-screens realm@11.5.2 @notifee/react-native react-native-pager-view react-native-device-info react-native-image-crop-picker  ${syncCommand} `;
+  const installScreensAndSafeArea = `cd ${repoName} && npm install --save react-native-nano${nanoVer} react-native-rsa-native  react-native-reanimated react-native-safe-area-context react-native-screens realm@11.10.2 @notifee/react-native react-native-pager-view react-native-device-info react-native-image-crop-picker react-native-permissions@3.6.1 ${syncCommand} `;
   const installScreensAndSafeAreaResult = runCommand(installScreensAndSafeArea);
 
   if (!installScreensAndSafeAreaResult) process.exit(-1);
