@@ -23,6 +23,7 @@ import {
   installWindowsRequiredPackagesInRNProject,
   setUpANewProjectWithDefaultLoadingScreenForWindows,
   addNanoConfigToExistingWindowsProject,
+  createBabelConfigFileForWindows,
 } from "./src/windows.js";
 import {
   askUserInfoToGenerateKeyStoreFile,
@@ -161,7 +162,7 @@ const setUpANewMinimalProject = async ({
       repoName,
       reactNativeVers,
     });
-    createBabelConfigFile();
+    createBabelConfigFileForWindows({ commonUrl: commonUrl, repoName });
     createWindowsFolderStructureForMinimalProject({ repoName });
     await installWindowsRequiredPackagesInRNProject({
       repoName,
@@ -226,7 +227,11 @@ const createProjectWithSyncEnabled = ({
             nanoversion,
             reactNativeVers,
           });
-          createBabelConfigFile();
+          createBabelConfigFileForWindows({
+            commonUrl: commonUrl,
+            repoName: projectName,
+          });
+
           addNanoConfigToExistingWindowsProject(
             projectName,
             answers["app_id"],
