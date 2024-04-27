@@ -121,19 +121,26 @@ export const installWindowsRequiredPackagesInRNProject = async ({
   if (!installScreensAndSafeAreaResult) process.exit(-1);
   createNanoConfigForWindows(repoName, appId, appSecret);
   await changeJavaFilesForVectorIcons({ repoName });
- 
+
   console.log("Welcome to Nano");
 };
 
 const createFolderStructureWithDefaultLoadingScreenInWindows = ({
   repoName,
 }) => {
-  downloadFileAtPathGiven;
+  // downloadFileAtPathGiven;
   const downloadAppjsCommand = `CD ${repoName} && curl -s -S -LJO ${commonUrl}App3.js  && ren App3.js App.js`;
   const downloadresult = runCommand(downloadAppjsCommand);
   if (!downloadresult) process.exit(-1);
 };
 
+export const createBabelConfigFileForWindows = ({ repoName, commonUrl }) => {
+  const url = commonUrl + "babel.config.js";
+
+  const downloadBabelConfigjsCommand = `CD ${repoName} && curl -s -S -LJO ${url}`;
+  const downloadresult = runCommand(downloadBabelConfigjsCommand);
+  if (!downloadresult) process.exit(-1);
+};
 export const setUpANewProjectWithDefaultLoadingScreenForWindows = ({
   repoName,
   appId = null,
