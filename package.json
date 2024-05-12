@@ -2,20 +2,26 @@
   "name": "rn-nano",
   "version": "1.0.47",
   "description": "",
-  "main": "index.js",
-  "type": "module",
   "bin": {
-    "rn-nano": "./bin.js"
+    "rn-nano": "./dist/index.js"
   },
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx tsc"
   },
   "author": "sandarshnaroju",
   "license": "ISC",
   "dependencies": {
     "adm-zip": "^0.5.10",
+    "eslint-plugin-jest": "^26.9.0",
+    "extract-zip": "^2.0.1",
     "inquirer": "^8.2.5",
     "node-fetch": "^3.3.2",
     "yargs": "^17.7.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.8",
+    "typescript": "^5.4.5"
   }
 }
