@@ -1,5 +1,4 @@
-export const commonUrl =
-  "https://raw.githubusercontent.com/sandarshnaroju/nano-starter-template/master/";
+export const commonUrl = "https://raw.githubusercontent.com/sandarshnaroju/nano-starter-template/master/";
 export const themeText = `const lightTheme = {
     name: "light",
     isDark: false,
@@ -21,13 +20,8 @@ export const themeText = `const lightTheme = {
   
   export const THEMES = [lightTheme, darkTheme];
   `;
-
-export const COMMAND_ARGUMENTS = {
-  NANO_VERSION: "--nano-version",
-  REACT_NATIVE_VERSION: "--react-native-version",
-};
-
 export const KEYSTORE_ARGUMENTS = {
-  PATH: "--keystore",
-  PASSWORD: "--keystorepassword",
+    PATH: "--keystore",
+    PASSWORD: "--keystorepassword",
 };
+//# sourceMappingURL=Constants.js.map

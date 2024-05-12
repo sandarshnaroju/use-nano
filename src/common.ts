@@ -1,6 +1,8 @@
 import { execSync, exec } from "child_process";
-import { COMMAND_ARGUMENTS,KEYSTORE_ARGUMENTS } from "./Constants.js";
-export const runCommand = (command) => {
+
+import fs from "fs";
+import { COMMAND_ARGUMENTS } from "./Constants.js";
+export const runCommand = (command: string) => {
   try {
     execSync(`${command}`);
   } catch (e) {
@@ -9,12 +11,24 @@ export const runCommand = (command) => {
   }
   return true;
 };
+// enum COMMAND_ARGUMENTS {
+//   NANO_VERSION = "--nano-version",
+//   REACT_NATIVE_VERSION = "--react-native-version",
+// }
+
+type VersionTuple = [string | null, string | null];
+interface Args {
+  firstArgCommand: string | COMMAND_ARGUMENTS | null;
+  firstArgValue: string | null;
+  secondArgCommand: string | COMMAND_ARGUMENTS | null;
+  secondArgValue: string | null;
+}
 export const getNanoVersionAndReactNativeVersion = ({
   firstArgCommand,
   firstArgValue,
   secondArgCommand,
   secondArgValue,
-}) => {
+}: Args): VersionTuple => {
   // returns [nanoVersion, react native version]
 
   if (secondArgCommand != null && secondArgValue != null) {
@@ -49,11 +63,7 @@ export const getNanoVersionAndReactNativeVersion = ({
   return [null, null];
 };
 
-export const downloadFileAtPathGiven = ({ url, path }) => {
-  const downloadAppjsCommand = `cd ${path} && curl -s -S -LJO ${url} > /dev/null  `;
-  const downloadresult = runCommand(downloadAppjsCommand);
-  if (!downloadresult) process.exit(-1);
-};
+
 export const moveFile = ({ path, source, destination }) => {
   let downloadAppjsCommand = "";
   if (path) {
@@ -65,13 +75,26 @@ export const moveFile = ({ path, source, destination }) => {
   if (!downloadresult) process.exit(-1);
 };
 
+enum KEYSTORE_ARGUMENTS {
+  PATH = "--keystore",
+  PASSWORD = "--keystorepassword",
+}
+
+type KeystoreInfo = [string | null, string | null];
+
+interface KeystoreArgs {
+  firstArgCommand: KEYSTORE_ARGUMENTS | null;
+  firstArgValue: string | null;
+  secondArgCommand: KEYSTORE_ARGUMENTS | null;
+  secondArgValue: string | null;
+}
 
 export const getKeystorePathAndPasswordArray = ({
   firstArgCommand,
   firstArgValue,
   secondArgCommand,
   secondArgValue,
-}) => {
+}: KeystoreArgs): KeystoreInfo => {
   // returns [keystorepath, password]
 
   if (secondArgCommand != null && secondArgValue != null) {
@@ -104,4 +127,32 @@ export const getKeystorePathAndPasswordArray = ({
     }
   }
   return [null, null];
+};
+
+export const moveFileByNode = (oldPath, newPath, callback) => {
+  fs.rename(oldPath, newPath, function (err) {
+    if (err) {
+      if (err.code === "EXDEV") {
+        copy();
+      } else {
+        callback(err);
+      }
+      return;
+    }
+    callback();
+  });
+
+  function copy() {
+    var readStream = fs.createReadStream(oldPath);
+    var writeStream = fs.createWriteStream(newPath);
+
+    readStream.on("error", callback);
+    writeStream.on("error", callback);
+
+    readStream.on("close", function () {
+      fs.unlink(oldPath, callback);
+    });
+
+    readStream.pipe(writeStream);
+  }
 };

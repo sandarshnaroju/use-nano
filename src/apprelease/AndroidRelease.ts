@@ -1,6 +1,7 @@
 import inquirer from "inquirer";
 import { runCommand } from "../common.js";
 import fs from "fs";
+import { execSync } from "child_process";
 
 let keyStoreName = "keystore.jks";
 export const askUserInfoToGenerateKeyStoreFile = () => {
@@ -120,12 +121,17 @@ export const generateKeyStoreFile = ({
 
   if (!result) process.exit(-1);
 };
+interface GenerateApkParams {
+  keyStoreName?: string;
+  keyStorePassword?: string;
+  generatedApkName?: string;
+}
 
 export const generateApkWhenKeyStoreExists = ({
   keyStoreName,
   keyStorePassword,
   generatedApkName,
-}) => {
+}: GenerateApkParams) => {
   console.log("Generating unsigned release apk");
   generateUnsignedReleaseApk();
   console.log("Zip aligning unsigned release apk");
@@ -135,7 +141,6 @@ export const generateApkWhenKeyStoreExists = ({
     alignedUnsignedApkName: "zipAlignedUnSignedRelease.apk",
   });
 
-  console.log("GENERATING APKKKK", generatedApkName);
   generateSignedApk({
     keyStoreFile: keyStoreName,
     signedApkName: generatedApkName,
@@ -183,10 +188,10 @@ export const initialiseApkGeneration = () => {
     if (err) {
       console.log(`File ${filePath} does not exist.`);
       askUserInfoToGenerateKeyStoreFile();
-      generateApkWhenKeyStoreExists();
+      generateApkWhenKeyStoreExists({});
     } else {
       console.log(`File ${filePath} exists.`);
-      generateApkWhenKeyStoreExists();
+      generateApkWhenKeyStoreExists({});
     }
   });
 };
@@ -209,19 +214,22 @@ export const generateUnsignedDebugApk = () => {
 
 export const generateUnsignedReleaseApk = () => {
   const comm =
-    "cd android && ./gradlew assembleRelease && mv app/build/outputs/apk/release/app-release.apk unSignedRelease.apk";
-  const result = runCommand(comm);
+    " ./gradlew assembleRelease && mv app/build/outputs/apk/release/app-release.apk unSignedRelease.apk";
+  // const result = runCommand(comm);
+  execSync(`${comm}`, { cwd: `android` });
 
-  if (!result) process.exit(-1);
+  // if (!result) process.exit(-1);
 };
+
 export const zipAlignUnSignedApk = ({
   unSignedApk,
   alignedUnsignedApkName,
 }) => {
-  const comm = `cd android && zipalign -v -p 4 ${unSignedApk} ${alignedUnsignedApkName} `;
-  const result = runCommand(comm);
+  const comm = `zipalign -v -p 4 ${unSignedApk} ${alignedUnsignedApkName} `;
+  // const result = runCommand(comm);
 
-  if (!result) process.exit(-1);
+  // if (!result) process.exit(-1);
+  execSync(`${comm}`, { cwd: `android` });
 };
 export const generateSignedApk = ({
   keyStoreFile,
@@ -244,28 +252,31 @@ export const verifySignedApk = ({ signedApkFile }) => {
 ///////////////////Aab/////////////////////
 export const generateUnsignedDebugAab = () => {
   const comm =
-    "cd android && ./gradlew bundleDebug && mv app/build/outputs/bundle/debug/app-debug.aab unSignedDebug.aab";
-  const result = runCommand(comm);
+    "./gradlew bundleDebug && mv app/build/outputs/bundle/debug/app-debug.aab unSignedDebug.aab";
+  // const result = runCommand(comm);
 
-  if (!result) process.exit(-1);
+  // if (!result) process.exit(-1);
+  execSync(`${comm}`, { cwd: `android` });
 };
 
 export const generateUnsignedReleaseAab = () => {
   const comm =
-    "cd android && ./gradlew bundleRelease && mv app/build/outputs/bundle/release/app-release.aab unSignedRelease.aab";
-  const result = runCommand(comm);
+    "./gradlew bundleRelease && mv app/build/outputs/bundle/release/app-release.aab unSignedRelease.aab";
+  // const result = runCommand(comm);
+  execSync(`${comm}`, { cwd: `android` });
 
-  if (!result) process.exit(-1);
+  // if (!result) process.exit(-1);
 };
 
 export const zipAlignUnSignedAab = ({
   unSignedAab,
   alignedUnsignedAabName,
 }) => {
-  const comm = `cd android && zipalign -v -p 4 ${unSignedAab} ${alignedUnsignedAabName} `;
-  const result = runCommand(comm);
+  const comm = ` zipalign -v -p 4 ${unSignedAab} ${alignedUnsignedAabName} `;
+  // const result = runCommand(comm);
+  execSync(`${comm}`, { cwd: `android` });
 
-  if (!result) process.exit(-1);
+  // if (!result) process.exit(-1);
 };
 
 export const generateSignedAab = ({
