@@ -7,9 +7,13 @@ export const VERSIONS = {
   "1.0.62": {},
 };
 
-
-
-export const getPackageVersion = ({ packagename, rnNanoVersion }) => {
+export const getPackageVersion = ({
+  packagename,
+  rnNanoVersion,
+}: {
+  packagename: string;
+  rnNanoVersion: string;
+}): string => {
   if (packagename == null || packagename.length == 0) {
     return "";
   } else if (rnNanoVersion == null || rnNanoVersion.length == 0) {

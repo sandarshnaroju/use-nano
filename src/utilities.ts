@@ -1,7 +1,11 @@
 import https from "https";
 import * as fs from "fs";
 
-export function downloadFileWithCallback(url, path, callback) {
+export function downloadFileWithCallback(
+  url: string,
+  path: string,
+  callback: (string) => void
+): void {
   const file = fs.createWriteStream(path);
   https
     .get(url, function (response) {

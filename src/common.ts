@@ -1,8 +1,8 @@
 import { execSync, exec } from "child_process";
 
 import fs from "fs";
-import { COMMAND_ARGUMENTS } from "./Constants.js";
-export const runCommand = (command: string) => {
+import { COMMAND_ARGUMENTS } from "./constants.js";
+export const runCommand = (command: string): boolean => {
   try {
     execSync(`${command}`);
   } catch (e) {
@@ -11,10 +11,6 @@ export const runCommand = (command: string) => {
   }
   return true;
 };
-// enum COMMAND_ARGUMENTS {
-//   NANO_VERSION = "--nano-version",
-//   REACT_NATIVE_VERSION = "--react-native-version",
-// }
 
 type VersionTuple = [string | null, string | null];
 interface Args {
@@ -63,8 +59,15 @@ export const getNanoVersionAndReactNativeVersion = ({
   return [null, null];
 };
 
-
-export const moveFile = ({ path, source, destination }) => {
+export const moveFile = ({
+  path,
+  source,
+  destination,
+}: {
+  path: string;
+  source: string;
+  destination: string;
+}): void => {
   let downloadAppjsCommand = "";
   if (path) {
     downloadAppjsCommand = `cd ${path} && mv ${source} ${destination}`;
@@ -129,13 +132,17 @@ export const getKeystorePathAndPasswordArray = ({
   return [null, null];
 };
 
-export const moveFileByNode = (oldPath, newPath, callback) => {
+export const moveFileByNode = (
+  oldPath: string,
+  newPath: string,
+  callback: () => {}
+): void => {
   fs.rename(oldPath, newPath, function (err) {
     if (err) {
       if (err.code === "EXDEV") {
         copy();
       } else {
-        callback(err);
+        callback();
       }
       return;
     }

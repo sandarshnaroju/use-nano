@@ -1,11 +1,11 @@
 import extract from "extract-zip";
-import { moveFileByNode, runCommand } from "../common.js";
-import { commonUrl } from "../Constants.js";
-import { downloadFileWithCallback } from "../Utilities.js";
+import { moveFileByNode, runCommand } from "../../common.js";
+import { commonUrl } from "../../constants.js";
+import { downloadFileWithCallback } from "../../utilities.js";
 import path from "path";
 import fs from "fs";
 
-export const setupAndroidIcons = () => {
+export const setupAndroidIcons = (): void => {
   // const deleteAppts = `cd android/ && echo "include ':react-native-vector-icons'
   //   project(':react-native-vector-icons').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-vector-icons/android')" >> settings.gradle`;
 
@@ -54,6 +54,7 @@ export const setupAndroidIcons = () => {
           return null;
         }
       );
+      return null;
     });
   });
 };

@@ -48,7 +48,7 @@ export const getNanoVersionAndReactNativeVersion = ({ firstArgCommand, firstArgV
     }
     return [null, null];
 };
-export const moveFile = ({ path, source, destination }) => {
+export const moveFile = ({ path, source, destination, }) => {
     let downloadAppjsCommand = "";
     if (path) {
         downloadAppjsCommand = `cd ${path} && mv ${source} ${destination}`;
@@ -110,7 +110,7 @@ export const moveFileByNode = (oldPath, newPath, callback) => {
                 copy();
             }
             else {
-                callback(err);
+                callback();
             }
             return;
         }

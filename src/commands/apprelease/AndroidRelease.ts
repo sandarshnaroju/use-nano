@@ -1,126 +1,11 @@
 import inquirer from "inquirer";
-import { runCommand } from "../common.js";
+import { runCommand } from "../../common.js";
 import fs from "fs";
 import { execSync } from "child_process";
+import { askUserInfoToGenerateKeyStoreFile } from "../generatekeystore/index.js";
 
 let keyStoreName = "keystore.jks";
-export const askUserInfoToGenerateKeyStoreFile = () => {
-  inquirer
-    .prompt([
-      /* Pass your questions in here */
 
-      {
-        type: "input",
-        name: "keystore_path",
-
-        message: "name of generated keystore file",
-      },
-      {
-        type: "input",
-        name: "validity",
-        message: "Enter validity in days",
-      },
-      {
-        type: "input",
-        name: "alias",
-        message: "Enter alias",
-      },
-      {
-        type: "input",
-        name: "alias_password",
-        message: "Enter alias password",
-      },
-      {
-        type: "input",
-        name: "algorithm",
-        message: "Enter Key Algorithm",
-      },
-      {
-        type: "input",
-        name: "keysize",
-        message: "Enter key size",
-      },
-      {
-        type: "input",
-        name: "store_pass",
-        message: "Enter store password",
-      },
-
-      {
-        type: "input",
-        name: "cn",
-        message: "Enter your name",
-      },
-      {
-        type: "input",
-        name: "ou",
-        message: "Enter your organisational unit name(without spaces)",
-      },
-      {
-        type: "input",
-        name: "org",
-        message: "Enter organisation name(without spaces)",
-      },
-      {
-        type: "input",
-        name: "country",
-        message: "Enter your country",
-      },
-    ])
-    .then((answers) => {
-      if (
-        answers != null &&
-        answers["keystore_path"] != null &&
-        answers["validity"] != null &&
-        answers["alias"] != null &&
-        answers["alias_password"] != null &&
-        answers["store_pass"] != null &&
-        answers["cn"] != null &&
-        answers["ou"] != null &&
-        answers["org"] != null &&
-        answers["country"] != null &&
-        answers["algorithm"] != null &&
-        answers["keysize"] != null
-      ) {
-        const generatedDname = `"cn=${answers["cn"]}, ou=${answers["ou"]}, o=${answers["org"]}, c=${answers["country"]}"`;
-        // keyStoreName = answers["keystore_path"];
-        generateKeyStoreFile({
-          alias: answers["alias"],
-          aliasPassword: answers["alias_password"],
-          dName: generatedDname,
-          keyAlgorithm: answers["algorithm"],
-          keySize: answers["keysize"],
-          keystoreFileName: answers["keystore_path"],
-          keyStorepassword: answers["store_pass"],
-          validity: answers["validity"],
-        });
-      }
-    })
-    .catch((error) => {
-      if (error.isTtyError) {
-        // Prompt couldn't be rendered in the current environment
-      } else {
-        // Something else went wrong
-      }
-    });
-};
-
-export const generateKeyStoreFile = ({
-  keystoreFileName,
-  keyAlgorithm,
-  keySize,
-  validity,
-  alias,
-  keyStorepassword,
-  aliasPassword,
-  dName,
-}) => {
-  // dname format is "cn=Mark Jones, ou=JavaSoft, o=Sun, c=US"
-  const comm = `keytool -genkey -v -keystore ${keystoreFileName} -keyalg ${keyAlgorithm} -keysize ${keySize} -validity ${validity} -alias ${alias} -storepass ${keyStorepassword} -keypass ${aliasPassword} -dname ${dName}`;
-  const result = runCommand(comm);
-
-  if (!result) process.exit(-1);
-};
 interface GenerateApkParams {
   keyStoreName?: string;
   keyStorePassword?: string;
@@ -131,7 +16,7 @@ export const generateApkWhenKeyStoreExists = ({
   keyStoreName,
   keyStorePassword,
   generatedApkName,
-}: GenerateApkParams) => {
+}: GenerateApkParams): void => {
   console.log("Generating unsigned release apk");
   generateUnsignedReleaseApk();
   console.log("Zip aligning unsigned release apk");
@@ -158,7 +43,11 @@ export const generateDebugApkWhenKeyStoreExists = ({
   keyStoreName,
   keyStorePassword,
   generatedApkName,
-}) => {
+}: {
+  keyStoreName: string;
+  keyStorePassword: string;
+  generatedApkName: string;
+}): void => {
   console.log("Generating unsigned debug apk");
   generateUnsignedDebugApk();
   console.log("Zip aligning unsigned debug apk");
@@ -182,7 +71,7 @@ export const generateDebugApkWhenKeyStoreExists = ({
   console.log(` Debug apk : ${generatedApkName} is generated`);
 };
 
-export const initialiseApkGeneration = () => {
+export const initialiseApkGeneration = (): void => {
   const filePath = "keystore.jks";
   fs.access(filePath, fs.constants.F_OK, (err) => {
     if (err) {
@@ -195,7 +84,7 @@ export const initialiseApkGeneration = () => {
     }
   });
 };
-const cleanupAfterGenerating = () => {
+const cleanupAfterGenerating = (): void => {
   const comm = `rm -rf signedDebug.apk.idsig && rm -rf signedRelease.apk.idsig && cd android && rm -rf unSignedRelease.apk && rm -rf zipAlignedUnSignedRelease.apk && rm -rf unSignedDebug.apk && rm -rf zipAlignedUnSignedDebug.apk`;
   const result = runCommand(comm);
 
@@ -203,7 +92,7 @@ const cleanupAfterGenerating = () => {
 };
 //////////////Apk ////////////////////
 // Run from root
-export const generateUnsignedDebugApk = () => {
+export const generateUnsignedDebugApk = (): void => {
   // generate debug apk and copy it from android/app/build/outputs/apk/debug to android/unSignedDebugApk.apk
   const comm =
     "cd android && ./gradlew assembleDebug && mv app/build/outputs/apk/debug/app-debug.apk unSignedDebug.apk ";
@@ -212,7 +101,7 @@ export const generateUnsignedDebugApk = () => {
   if (!result) process.exit(-1);
 };
 
-export const generateUnsignedReleaseApk = () => {
+export const generateUnsignedReleaseApk = (): void => {
   const comm =
     " ./gradlew assembleRelease && mv app/build/outputs/apk/release/app-release.apk unSignedRelease.apk";
   // const result = runCommand(comm);
@@ -224,7 +113,10 @@ export const generateUnsignedReleaseApk = () => {
 export const zipAlignUnSignedApk = ({
   unSignedApk,
   alignedUnsignedApkName,
-}) => {
+}: {
+  unSignedApk: string;
+  alignedUnsignedApkName: string;
+}): void => {
   const comm = `zipalign -v -p 4 ${unSignedApk} ${alignedUnsignedApkName} `;
   // const result = runCommand(comm);
 
@@ -236,13 +128,22 @@ export const generateSignedApk = ({
   signedApkName,
   unsignedApk,
   password,
-}) => {
+}: {
+  keyStoreFile: string;
+  signedApkName: string;
+  unsignedApk: string;
+  password: string;
+}): void => {
   const comm = `apksigner sign --ks ${keyStoreFile}  --ks-pass pass:${password}  --out ${signedApkName} ${unsignedApk} `;
   const result = runCommand(comm);
 
   if (!result) process.exit(-1);
 };
-export const verifySignedApk = ({ signedApkFile }) => {
+export const verifySignedApk = ({
+  signedApkFile,
+}: {
+  signedApkFile: string;
+}): void => {
   const comm = ` apksigner verify ${signedApkFile}  `;
   const result = runCommand(comm);
 
@@ -250,7 +151,7 @@ export const verifySignedApk = ({ signedApkFile }) => {
 };
 
 ///////////////////Aab/////////////////////
-export const generateUnsignedDebugAab = () => {
+export const generateUnsignedDebugAab = (): void => {
   const comm =
     "./gradlew bundleDebug && mv app/build/outputs/bundle/debug/app-debug.aab unSignedDebug.aab";
   // const result = runCommand(comm);
@@ -259,7 +160,7 @@ export const generateUnsignedDebugAab = () => {
   execSync(`${comm}`, { cwd: `android` });
 };
 
-export const generateUnsignedReleaseAab = () => {
+export const generateUnsignedReleaseAab = (): void => {
   const comm =
     "./gradlew bundleRelease && mv app/build/outputs/bundle/release/app-release.aab unSignedRelease.aab";
   // const result = runCommand(comm);
@@ -271,7 +172,10 @@ export const generateUnsignedReleaseAab = () => {
 export const zipAlignUnSignedAab = ({
   unSignedAab,
   alignedUnsignedAabName,
-}) => {
+}: {
+  unSignedAab: string;
+  alignedUnsignedAabName: string;
+}): void => {
   const comm = ` zipalign -v -p 4 ${unSignedAab} ${alignedUnsignedAabName} `;
   // const result = runCommand(comm);
   execSync(`${comm}`, { cwd: `android` });
@@ -284,21 +188,30 @@ export const generateSignedAab = ({
   signedAabName,
   unsignedAab,
   password,
-}) => {
+}: {
+  keyStoreFile: string;
+  signedAabName: string;
+  unsignedAab: string;
+  password: string;
+}): void => {
   const comm = `apksigner sign --ks ${keyStoreFile} --min-sdk-version 21 --ks-pass pass:${password} --out ${signedAabName} ${unsignedAab} `;
   const result = runCommand(comm);
 
   if (!result) process.exit(-1);
 };
 
-export const verifySignedAab = ({ signedAabFile }) => {
+export const verifySignedAab = ({
+  signedAabFile,
+}: {
+  signedAabFile: string;
+}): void => {
   const comm = `apksigner verify ${signedAabFile}  `;
   const result = runCommand(comm);
 
   if (!result) process.exit(-1);
 };
 
-const cleanupAabsAfterGenerating = () => {
+const cleanupAabsAfterGenerating = (): void => {
   const comm = `rm -rf signedDebug.aab.idsig && rm -rf signedRelease.aab.idsig && cd android && rm -rf unSignedRelease.aab && rm -rf zipAlignedUnSignedRelease.aab && rm -rf unSignedDebug.aab && rm -rf zipAlignedUnSignedDebug.aab`;
   const result = runCommand(comm);
 
@@ -308,7 +221,11 @@ export const generateDebugAabWhenKeyStoreExists = ({
   keyStoreName,
   keyStorePassword,
   generatedAabName,
-}) => {
+}: {
+  keyStoreName: string;
+  keyStorePassword: string;
+  generatedAabName: string;
+}): void => {
   console.log("Generating unsigned debug aab");
   generateUnsignedDebugAab();
   console.log("Zip aligning unsigned debug aab");
@@ -333,7 +250,11 @@ export const generateAabWhenKeyStoreExists = ({
   keyStoreName,
   keyStorePassword,
   generatedAabName,
-}) => {
+}: {
+  keyStoreName: string;
+  keyStorePassword: string;
+  generatedAabName: string;
+}): void => {
   console.log("Generating unsigned release aab");
   generateUnsignedReleaseAab();
   console.log("Zip aligning unsigned release aab");

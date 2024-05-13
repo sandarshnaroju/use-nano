@@ -1,6 +1,10 @@
-import { runCommand } from "../common.js";
+import { runCommand } from "../../common.js";
 
-export const createLauncherIcon = ({ userCommand }) => {
+export const createLauncherIcon = ({
+  userCommand,
+}: {
+  userCommand: string;
+}): void => {
   const command = `npx icon-set-creator ${userCommand}`;
   const commandRes = runCommand(command);
 
