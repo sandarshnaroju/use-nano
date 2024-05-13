@@ -98,6 +98,7 @@ const changeJavaFilesForVectorIcons = ({ repoName }) => {
   });
 };
 
+
 const npmInstallRequiredPackagesInRNProject = ({
   repoName,
   appId,
