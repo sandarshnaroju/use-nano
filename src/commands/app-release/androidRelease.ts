@@ -2,7 +2,7 @@ import inquirer from "inquirer";
 import { runCommand } from "../../common.js";
 import fs from "fs";
 import { execSync } from "child_process";
-import { askUserInfoToGenerateKeyStoreFile } from "../generatekeystore/index.js";
+import { askUserInfoToGenerateKeyStoreFile } from "../generate-keystore/index.js";
 
 let keyStoreName = "keystore.jks";
 

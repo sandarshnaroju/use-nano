@@ -1,15 +1,16 @@
 #! /usr/bin/env node
+import fs from "fs";
 
-import { setupAndroidIcons } from "./commands/icons/AndroidIcons.js";
-import { setupIosIcons } from "./commands/icons/IosIcons.js";
+import { setupAndroidIcons } from "./commands/icons/androidIcons.js";
+import { setupIosIcons } from "./commands/icons/iosIcons.js";
 import { createLauncherIcon } from "./commands/launcherIcon/createLauncherIcons.js";
-import { renameAndroidProject } from "./commands/rename/Rename.js";
+import { renameAndroidProject } from "./commands/rename/rename.js";
 
 import { initProjectCreation } from "./commands/init/index.js";
-import { generateApk } from "./commands/generateapk/index.js";
-import { generateAab } from "./commands/generateaab/index.js";
+import { generateApk } from "./commands/generate-apk/index.js";
+import { generateAab } from "./commands/generate-aab/index.js";
 import { build } from "./commands/build/index.js";
-import { askUserInfoToGenerateKeyStoreFile } from "./commands/generatekeystore/index.js";
+import { askUserInfoToGenerateKeyStoreFile } from "./commands/generate-keystore/index.js";
 
 const args = process.argv.slice(2);
 const command = args[0];
@@ -76,3 +77,4 @@ function start() {
 }
 
 start();
+// fs.unlinkSync(`mammamamama/android/app/src/main/assets.zip`);

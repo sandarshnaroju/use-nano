@@ -32,19 +32,30 @@ export const changeJavaFilesForVectorIcons = ({
       }
     }
     // fs.unlinkSync(`${repoName}/android/app/build.gradle`);
+    console.log("Build.gradle moving");
+
     moveFileByNode(
       `${repoName}/build.gradle`,
       `${repoName}/android/app/build.gradle`,
       () => {
+        console.log("Downloading Assets.zip");
+
         downloadFileWithCallback(
           commonUrl + "assets.zip",
           repoName + "/android/app/src/main/assets.zip",
-          () => {
+          (res) => {
+            console.log("Download assets.zip response", res);
+
             extract(repoName + "/android/app/src/main/assets.zip", {
               dir: path.resolve(path.join(repoName, "android/app/src/main")),
-            });
-            fs.unlinkSync(`${repoName}/android/app/src/main/assets.zip`);
-            process.exit(0);
+            })
+              .then(() => {
+                fs.unlinkSync(`${repoName}/android/app/src/main/assets.zip`);
+              })
+              .catch(() => {});
+            console.log("Extravtedd assets.zip");
+
+            // process.exit(0);
 
             return null;
           }

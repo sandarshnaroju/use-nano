@@ -48,8 +48,11 @@ export const setupAndroidIcons = (): void => {
 
           extract("android/app/src/main/assets.zip", {
             dir: path.resolve(path.join("android/app/src/main")),
-          });
-          fs.unlinkSync(`android/app/src/main/assets.zip`);
+          })
+            .then(() => {
+              fs.unlinkSync(`android/app/src/main/assets.zip`);
+            })
+            .catch(() => {});
 
           return null;
         }

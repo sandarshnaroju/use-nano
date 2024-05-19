@@ -8,7 +8,7 @@ import {
   changeJavaFilesForVectorIcons,
   createNanoConfig,
 } from "./setup.js";
-import { getPackageVersion } from "../../versions.js";
+import { VERSIONS, getPackageVersion } from "./versions.js";
 import inquirer from "inquirer";
 
 const createReactNativeProject = ({
@@ -28,10 +28,10 @@ const createReactNativeProject = ({
         getPackageVersion({
           packagename: "react-native",
           rnNanoVersion: nanoversion,
-        });
-  console.log("Installing React native ", RNversionString);
+        }).slice(1);
 
   const reactnativeinstall = `npx react-native init ${repoName} ${RNversionString}`;
+  console.log("Installing React native ", reactnativeinstall);
 
   execSync(`${reactnativeinstall}`);
 };
@@ -85,6 +85,45 @@ const downloadNanoAppJsAndBabelFiles = ({
   );
 };
 
+const generateInstallationCommandWithVersions = ({
+  nanoVersion,
+  isSyncFunctionalityRequired,
+}: {
+  nanoVersion: string;
+  isSyncFunctionalityRequired: boolean;
+}): string => {
+  // const syncCommand = isSyncFunctionalityRequired ? "rn-nano-sync " : "";
+
+  let finalCommand = "npm install --save";
+  if (nanoVersion != null && nanoVersion != "") {
+    Object.keys(VERSIONS[nanoVersion]).forEach((packagename) => {
+      if (packagename !== "react-native") {
+        finalCommand += ` ${packagename}@${VERSIONS[nanoVersion][packagename]}  `;
+      }
+      if (isSyncFunctionalityRequired && packagename == "rn-nano-sync") {
+        finalCommand += ` ${packagename}@${VERSIONS[nanoVersion][packagename]}  `;
+      }
+    });
+  } else {
+    const versionsArray = Object.keys(VERSIONS);
+    let latestVersion = versionsArray[0];
+    for (const version in versionsArray) {
+      if (!latestVersion || version > latestVersion) {
+        latestVersion = version;
+      }
+    }
+    Object.keys(VERSIONS[latestVersion]).forEach((packagename) => {
+      if (packagename !== "react-native") {
+        finalCommand += ` ${packagename}@${VERSIONS[latestVersion][packagename]}  `;
+      }
+      if (isSyncFunctionalityRequired && packagename == "rn-nano-sync") {
+        finalCommand += ` ${packagename}@${VERSIONS[latestVersion][packagename]}  `;
+      }
+    });
+  }
+  return finalCommand;
+};
+
 const npmInstallRequiredPackagesInRNProject = ({
   repoName,
   appId,
@@ -102,29 +141,36 @@ const npmInstallRequiredPackagesInRNProject = ({
   reanimatedVersion?: string;
   realmVersion?: string;
 }): void => {
-  const syncCommand = isSyncFunctionalityRequired ? "rn-nano-sync " : "";
-  const nanoVer =
-    nanoversion != null && nanoversion != "" ? `@${nanoversion}` : "";
+  // const nanoVer =
+  //   nanoversion != null && nanoversion != "" ? `@${nanoversion}` : "";
 
-  const reanimatedCommand =
-    reanimatedVersion != null
-      ? `react-native-reanimated@` + reanimatedVersion
-      : `react-native-reanimated` +
-        getPackageVersion({
-          packagename: "react-native-reanimated",
-          rnNanoVersion: nanoversion,
-        });
+  // const reanimatedCommand =
+  //   reanimatedVersion != null
+  //     ? `react-native-reanimated@` + reanimatedVersion
+  //     : `react-native-reanimated` +
+  //       getPackageVersion({
+  //         packagename: "react-native-reanimated",
+  //         rnNanoVersion: nanoversion,
+  //       });
 
-  const realmCommand =
-    realmVersion != null
-      ? "realm@" + realmVersion
-      : "realm" +
-        getPackageVersion({
-          packagename: "realm",
-          rnNanoVersion: nanoversion,
-        });
+  // const realmCommand =
+  //   realmVersion != null
+  //     ? "realm@" + realmVersion
+  //     : "realm" +
+  //       getPackageVersion({
+  //         packagename: "realm",
+  //         rnNanoVersion: nanoversion,
+  //       });
 
-  const installPackagesCOmmand = `npm install --save react-native-nano${nanoVer} react-native-rsa-native  ${reanimatedCommand} react-native-safe-area-context react-native-screens ${realmCommand} @notifee/react-native react-native-pager-view react-native-device-info react-native-image-crop-picker react-native-permissions@3.6.1 ${syncCommand} `;
+  // const installPackagesCOmmand = `npm install --save react-native-nano${nanoVer} react-native-rsa-native  ${reanimatedCommand} react-native-safe-area-context react-native-screens ${realmCommand} @notifee/react-native react-native-pager-view react-native-device-info react-native-image-crop-picker react-native-permissions@3.6.1 ${syncCommand} `;
+  const installPackagesCOmmand = generateInstallationCommandWithVersions({
+    nanoVersion: nanoversion,
+    isSyncFunctionalityRequired,
+  });
+  // console.log(
+  //   "FInall command ",
+  //   generateInstallationCommandWithVersions({ nanoVersion: nanoversion })
+  // );
 
   execSync(`${installPackagesCOmmand}`, { cwd: `${repoName}` });
   createNanoConfig(repoName, appId, appSecret);
@@ -151,8 +197,11 @@ export const setUpANewMinimalProject = ({
     nanoversion,
     reactNativeVers,
   });
+  console.log("React native installed successfully");
 
   deleteDefaultAppTsAndBabelFiles({ repoName });
+  console.log("Deleted default files");
+
   downloadNanoAppJsAndBabelFiles({
     onFinish: () => {
       npmInstallRequiredPackagesInRNProject({
