@@ -1,6 +1,6 @@
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-import { generateApkWhenKeyStoreExists, generateDebugApkWhenKeyStoreExists, } from "../app-release/androidRelease.js";
+import { generateApkWhenKeyStoreExists, generateDebugApkWhenKeyStoreExists, } from "../app-release/android-release.js";
 export const generateApk = () => {
     const args = process.argv.slice(2);
     const keyStorePath = args.slice(1);

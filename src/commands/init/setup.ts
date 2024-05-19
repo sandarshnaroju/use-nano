@@ -31,7 +31,6 @@ export const changeJavaFilesForVectorIcons = ({
         fs.appendFileSync(`${repoName}/build.gradle`, array[i] + "\n");
       }
     }
-    // fs.unlinkSync(`${repoName}/android/app/build.gradle`);
     console.log("Build.gradle moving");
 
     moveFileByNode(
@@ -53,9 +52,8 @@ export const changeJavaFilesForVectorIcons = ({
                 fs.unlinkSync(`${repoName}/android/app/src/main/assets.zip`);
               })
               .catch(() => {});
-            console.log("Extravtedd assets.zip");
+            console.log("Extracted assets.zip");
 
-            // process.exit(0);
 
             return null;
           }

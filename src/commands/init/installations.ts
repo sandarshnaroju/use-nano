@@ -1,5 +1,5 @@
 import { exec, execSync } from "child_process";
-import { commonUrl } from "../../constants.js";
+import { COMMAND_ARGUMENTS, commonUrl } from "../../constants.js";
 import fs from "fs";
 import path from "path";
 import { downloadFileWithCallback } from "../../utilities.js";
@@ -74,7 +74,6 @@ const downloadNanoAppJsAndBabelFiles = ({
         commonUrl + "App2.js",
         repoName + "/App.js",
         () => {
-          // process.exit(0);
           onFinish();
 
           return null;
@@ -88,12 +87,13 @@ const downloadNanoAppJsAndBabelFiles = ({
 const generateInstallationCommandWithVersions = ({
   nanoVersion,
   isSyncFunctionalityRequired,
+  userArgs,
 }: {
   nanoVersion: string;
   isSyncFunctionalityRequired: boolean;
-}): string => {
-  // const syncCommand = isSyncFunctionalityRequired ? "rn-nano-sync " : "";
 
+  userArgs: object;
+}): string => {
   let finalCommand = "npm install --save";
   if (nanoVersion != null && nanoVersion != "") {
     Object.keys(VERSIONS[nanoVersion]).forEach((packagename) => {
@@ -130,47 +130,23 @@ const npmInstallRequiredPackagesInRNProject = ({
   appSecret,
   isSyncFunctionalityRequired = false,
   nanoversion = null,
-  reanimatedVersion,
-  realmVersion,
+
+  userArgs,
 }: {
   repoName: string;
   appId: string;
   appSecret: string;
   isSyncFunctionalityRequired?: boolean;
   nanoversion?: string;
-  reanimatedVersion?: string;
-  realmVersion?: string;
+
+  userArgs: object;
 }): void => {
-  // const nanoVer =
-  //   nanoversion != null && nanoversion != "" ? `@${nanoversion}` : "";
-
-  // const reanimatedCommand =
-  //   reanimatedVersion != null
-  //     ? `react-native-reanimated@` + reanimatedVersion
-  //     : `react-native-reanimated` +
-  //       getPackageVersion({
-  //         packagename: "react-native-reanimated",
-  //         rnNanoVersion: nanoversion,
-  //       });
-
-  // const realmCommand =
-  //   realmVersion != null
-  //     ? "realm@" + realmVersion
-  //     : "realm" +
-  //       getPackageVersion({
-  //         packagename: "realm",
-  //         rnNanoVersion: nanoversion,
-  //       });
-
-  // const installPackagesCOmmand = `npm install --save react-native-nano${nanoVer} react-native-rsa-native  ${reanimatedCommand} react-native-safe-area-context react-native-screens ${realmCommand} @notifee/react-native react-native-pager-view react-native-device-info react-native-image-crop-picker react-native-permissions@3.6.1 ${syncCommand} `;
+  /* const installPackagesCOmmand = `npm install --save react-native-nano${nanoVer} react-native-rsa-native  ${reanimatedCommand} react-native-safe-area-context react-native-screens ${realmCommand} @notifee/react-native react-native-pager-view react-native-device-info react-native-image-crop-picker react-native-permissions@3.6.1 ${syncCommand} `;*/
   const installPackagesCOmmand = generateInstallationCommandWithVersions({
     nanoVersion: nanoversion,
     isSyncFunctionalityRequired,
+    userArgs,
   });
-  // console.log(
-  //   "FInall command ",
-  //   generateInstallationCommandWithVersions({ nanoVersion: nanoversion })
-  // );
 
   execSync(`${installPackagesCOmmand}`, { cwd: `${repoName}` });
   createNanoConfig(repoName, appId, appSecret);
@@ -185,12 +161,14 @@ export const setUpANewMinimalProject = ({
   appSecret = null,
   nanoversion,
   reactNativeVers,
+  userArgs,
 }: {
   repoName: string;
   appId?: string;
   appSecret?: string;
   nanoversion?: string;
   reactNativeVers?: string;
+  userArgs: object;
 }): void => {
   createReactNativeProject({
     repoName,
@@ -209,6 +187,7 @@ export const setUpANewMinimalProject = ({
         appId,
         appSecret,
         nanoversion,
+        userArgs,
       });
     },
     repoName,
@@ -220,10 +199,12 @@ export const createProjectWithSyncEnabled = ({
   projectName,
   nanoversion,
   reactNativeVers,
+  userArgs,
 }: {
   projectName: string;
   nanoversion?: string;
   reactNativeVers?: string;
+  userArgs: object;
 }): void => {
   inquirer
     .prompt([
@@ -233,12 +214,12 @@ export const createProjectWithSyncEnabled = ({
         type: "input",
         name: "app_id",
 
-        message: "Enter your appId",
+        message: "Enter your app id",
       },
       {
         type: "input",
         name: "app_secret",
-        message: "Enter your appSecret",
+        message: "Enter your app secret",
       },
       {
         type: "input",
@@ -247,7 +228,6 @@ export const createProjectWithSyncEnabled = ({
       },
     ])
     .then((answers) => {
-      // Use user feedback for... whatever!!
       if (
         answers != null &&
         answers["app_id"] != null &&
@@ -271,15 +251,13 @@ export const createProjectWithSyncEnabled = ({
               appSecret: answers["app_secret"],
               nanoversion,
               isSyncFunctionalityRequired: true,
+              userArgs,
             });
-            // process.exit(0);
 
             return null;
           }
         );
-        // if (fs.existsSync(path.join(repoName, "/babel.config.js"))) {
-        //   fs.unlinkSync(path.join(repoName, "/babel.config.js"));
-        // }
+
         const babelDownloadUrl =
           reactNativeVers != null
             ? reactNativeVers > "0.72.0"
@@ -303,9 +281,7 @@ export const createProjectWithSyncEnabled = ({
     })
     .catch((error) => {
       if (error.isTtyError) {
-        // Prompt couldn't be rendered in the current environment
       } else {
-        // Something else went wrong
       }
     });
 };

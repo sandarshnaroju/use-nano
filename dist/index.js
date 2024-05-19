@@ -1,7 +1,7 @@
 #! /usr/bin/env node
-import { setupAndroidIcons } from "./commands/icons/androidIcons.js";
-import { setupIosIcons } from "./commands/icons/iosIcons.js";
-import { createLauncherIcon } from "./commands/launcherIcon/createLauncherIcons.js";
+import { setupAndroidIcons } from "./commands/icons/android-icons.js";
+import { setupIosIcons } from "./commands/icons/ios-icons.js";
+import { createLauncherIcon } from "./commands/launcher-icon/launcher-icon.js";
 import { renameAndroidProject } from "./commands/rename/rename.js";
 import { initProjectCreation } from "./commands/init/index.js";
 import { generateApk } from "./commands/generate-apk/index.js";
@@ -21,7 +21,6 @@ function start() {
             renameAndroidProject({ userCommand });
             break;
         case "icons":
-            // const platform = args.slice(1);
             const platform = args.slice(1)[0];
             switch (platform) {
                 case "android":
@@ -56,5 +55,4 @@ function start() {
     }
 }
 start();
-// fs.unlinkSync(`mammamamama/android/app/src/main/assets.zip`);
 //# sourceMappingURL=index.js.map

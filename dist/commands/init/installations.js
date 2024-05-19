@@ -37,15 +37,13 @@ const downloadNanoAppJsAndBabelFiles = ({ onFinish, repoName, reactNativeVers, }
         : commonUrl + "babel.config2.js";
     downloadFileWithCallback(babelDownloadUrl, repoName + "/babel.config.js", () => {
         downloadFileWithCallback(commonUrl + "App2.js", repoName + "/App.js", () => {
-            // process.exit(0);
             onFinish();
             return null;
         });
         return null;
     });
 };
-const generateInstallationCommandWithVersions = ({ nanoVersion, isSyncFunctionalityRequired, }) => {
-    // const syncCommand = isSyncFunctionalityRequired ? "rn-nano-sync " : "";
+const generateInstallationCommandWithVersions = ({ nanoVersion, isSyncFunctionalityRequired, userArgs, }) => {
     let finalCommand = "npm install --save";
     if (nanoVersion != null && nanoVersion != "") {
         Object.keys(VERSIONS[nanoVersion]).forEach((packagename) => {
@@ -76,40 +74,19 @@ const generateInstallationCommandWithVersions = ({ nanoVersion, isSyncFunctional
     }
     return finalCommand;
 };
-const npmInstallRequiredPackagesInRNProject = ({ repoName, appId, appSecret, isSyncFunctionalityRequired = false, nanoversion = null, reanimatedVersion, realmVersion, }) => {
-    // const nanoVer =
-    //   nanoversion != null && nanoversion != "" ? `@${nanoversion}` : "";
-    // const reanimatedCommand =
-    //   reanimatedVersion != null
-    //     ? `react-native-reanimated@` + reanimatedVersion
-    //     : `react-native-reanimated` +
-    //       getPackageVersion({
-    //         packagename: "react-native-reanimated",
-    //         rnNanoVersion: nanoversion,
-    //       });
-    // const realmCommand =
-    //   realmVersion != null
-    //     ? "realm@" + realmVersion
-    //     : "realm" +
-    //       getPackageVersion({
-    //         packagename: "realm",
-    //         rnNanoVersion: nanoversion,
-    //       });
-    // const installPackagesCOmmand = `npm install --save react-native-nano${nanoVer} react-native-rsa-native  ${reanimatedCommand} react-native-safe-area-context react-native-screens ${realmCommand} @notifee/react-native react-native-pager-view react-native-device-info react-native-image-crop-picker react-native-permissions@3.6.1 ${syncCommand} `;
+const npmInstallRequiredPackagesInRNProject = ({ repoName, appId, appSecret, isSyncFunctionalityRequired = false, nanoversion = null, userArgs, }) => {
+    /* const installPackagesCOmmand = `npm install --save react-native-nano${nanoVer} react-native-rsa-native  ${reanimatedCommand} react-native-safe-area-context react-native-screens ${realmCommand} @notifee/react-native react-native-pager-view react-native-device-info react-native-image-crop-picker react-native-permissions@3.6.1 ${syncCommand} `;*/
     const installPackagesCOmmand = generateInstallationCommandWithVersions({
         nanoVersion: nanoversion,
         isSyncFunctionalityRequired,
+        userArgs,
     });
-    // console.log(
-    //   "FInall command ",
-    //   generateInstallationCommandWithVersions({ nanoVersion: nanoversion })
-    // );
     execSync(`${installPackagesCOmmand}`, { cwd: `${repoName}` });
     createNanoConfig(repoName, appId, appSecret);
     changeJavaFilesForVectorIcons({ repoName });
     console.log("Welcome to Nano");
 };
-export const setUpANewMinimalProject = ({ repoName, appId = null, appSecret = null, nanoversion, reactNativeVers, }) => {
+export const setUpANewMinimalProject = ({ repoName, appId = null, appSecret = null, nanoversion, reactNativeVers, userArgs, }) => {
     createReactNativeProject({
         repoName,
         nanoversion,
@@ -125,25 +102,26 @@ export const setUpANewMinimalProject = ({ repoName, appId = null, appSecret = nu
                 appId,
                 appSecret,
                 nanoversion,
+                userArgs,
             });
         },
         repoName,
         reactNativeVers: reactNativeVers,
     });
 };
-export const createProjectWithSyncEnabled = ({ projectName, nanoversion, reactNativeVers, }) => {
+export const createProjectWithSyncEnabled = ({ projectName, nanoversion, reactNativeVers, userArgs, }) => {
     inquirer
         .prompt([
         /* Pass your questions in here */
         {
             type: "input",
             name: "app_id",
-            message: "Enter your appId",
+            message: "Enter your app id",
         },
         {
             type: "input",
             name: "app_secret",
-            message: "Enter your appSecret",
+            message: "Enter your app secret",
         },
         {
             type: "input",
@@ -152,7 +130,6 @@ export const createProjectWithSyncEnabled = ({ projectName, nanoversion, reactNa
         },
     ])
         .then((answers) => {
-        // Use user feedback for... whatever!!
         if (answers != null &&
             answers["app_id"] != null &&
             answers["app_secret"] != null &&
@@ -170,13 +147,10 @@ export const createProjectWithSyncEnabled = ({ projectName, nanoversion, reactNa
                     appSecret: answers["app_secret"],
                     nanoversion,
                     isSyncFunctionalityRequired: true,
+                    userArgs,
                 });
-                // process.exit(0);
                 return null;
             });
-            // if (fs.existsSync(path.join(repoName, "/babel.config.js"))) {
-            //   fs.unlinkSync(path.join(repoName, "/babel.config.js"));
-            // }
             const babelDownloadUrl = reactNativeVers != null
                 ? reactNativeVers > "0.72.0"
                     ? commonUrl + "babel.config2.js"
@@ -190,10 +164,8 @@ export const createProjectWithSyncEnabled = ({ projectName, nanoversion, reactNa
     })
         .catch((error) => {
         if (error.isTtyError) {
-            // Prompt couldn't be rendered in the current environment
         }
         else {
-            // Something else went wrong
         }
     });
 };

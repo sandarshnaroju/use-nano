@@ -74,7 +74,6 @@ export const askUserInfoToGenerateKeyStoreFile = () => {
             answers["algorithm"] != null &&
             answers["keysize"] != null) {
             const generatedDname = `"cn=${answers["cn"]}, ou=${answers["ou"]}, o=${answers["org"]}, c=${answers["country"]}"`;
-            // keyStoreName = answers["keystore_path"];
             generateKeyStoreFile({
                 alias: answers["alias"],
                 aliasPassword: answers["alias_password"],
@@ -89,15 +88,13 @@ export const askUserInfoToGenerateKeyStoreFile = () => {
     })
         .catch((error) => {
         if (error.isTtyError) {
-            // Prompt couldn't be rendered in the current environment
         }
         else {
-            // Something else went wrong
         }
     });
 };
 export const generateKeyStoreFile = ({ keystoreFileName, keyAlgorithm, keySize, validity, alias, keyStorepassword, aliasPassword, dName, }) => {
-    // dname format is "cn=Mark Jones, ou=JavaSoft, o=Sun, c=US"
+    /* dname format is "cn=Mark Jones, ou=JavaSoft, o=Sun, c=US" */
     const comm = `keytool -genkey -v -keystore ${keystoreFileName} -keyalg ${keyAlgorithm} -keysize ${keySize} -validity ${validity} -alias ${alias} -storepass ${keyStorepassword} -keypass ${aliasPassword} -dname ${dName}`;
     const result = runCommand(comm);
     if (!result)

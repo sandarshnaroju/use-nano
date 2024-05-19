@@ -3,7 +3,7 @@ import { hideBin } from "yargs/helpers";
 import {
   generateApkWhenKeyStoreExists,
   generateDebugApkWhenKeyStoreExists,
-} from "../app-release/androidRelease.js";
+} from "../app-release/android-release.js";
 export const generateApk = (): void => {
   const args = process.argv.slice(2);
 

@@ -1,5 +1,5 @@
 export const VERSIONS = {
-  "1.0.163": {
+  "1.0.162": {
     "react-native": "0.74.1",
     "react-native-reanimated": "^3.9.0",
     realm: "^11.10.2",
@@ -15,7 +15,6 @@ export const VERSIONS = {
     "react-native-nano": "^1.0.162",
     "rn-nano-sync": "1.0.6",
   },
-  "1.0.62": {},
 };
 
 export const getPackageVersion = ({

@@ -6,20 +6,11 @@ import path from "path";
 import fs from "fs";
 
 export const setupAndroidIcons = (): void => {
-  // const deleteAppts = `cd android/ && echo "include ':react-native-vector-icons'
-  //   project(':react-native-vector-icons').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-vector-icons/android')" >> settings.gradle`;
-
   fs.appendFileSync(
     "/android/settings.gradle",
     `include ':react-native-vector-icons'
     project(':react-native-vector-icons').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-vector-icons/android')`
   );
-  // const delCommand = runCommand(deleteAppts);
-  // if (!delCommand) process.exit(-1);
-  // const deleteAppt = `cd android/app && awk '/dependencies/ {print; print \"    implementation project(\\\":react-native-vector-icons\\\")\"; next}1' build.gradle > temp && mv temp build.gradle`;
-
-  // const delComman = runCommand(deleteAppt);
-  // if (!delComman) process.exit(-1);
 
   fs.readFile(`android/app/build.gradle`, function (err, data) {
     if (err) throw err;
@@ -37,7 +28,7 @@ export const setupAndroidIcons = (): void => {
         fs.appendFileSync(`build.gradle`, array[i] + "\n");
       }
     }
-    // fs.unlinkSync(`${repoName}/android/app/build.gradle`);
+    /*fs.unlinkSync(`${repoName}/android/app/build.gradle`); */
     moveFileByNode(`build.gradle`, `android/app/build.gradle`, () => {
       console.log("MOVEDD succeddudu");
       downloadFileWithCallback(

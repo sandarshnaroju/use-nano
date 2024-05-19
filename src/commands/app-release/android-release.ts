@@ -91,9 +91,8 @@ const cleanupAfterGenerating = (): void => {
   if (!result) process.exit(-1);
 };
 //////////////Apk ////////////////////
-// Run from root
 export const generateUnsignedDebugApk = (): void => {
-  // generate debug apk and copy it from android/app/build/outputs/apk/debug to android/unSignedDebugApk.apk
+  /* generate debug apk and copy it from android/app/build/outputs/apk/debug to android/unSignedDebugApk.apk */
   const comm =
     "cd android && ./gradlew assembleDebug && mv app/build/outputs/apk/debug/app-debug.apk unSignedDebug.apk ";
   const result = runCommand(comm);
@@ -104,10 +103,7 @@ export const generateUnsignedDebugApk = (): void => {
 export const generateUnsignedReleaseApk = (): void => {
   const comm =
     " ./gradlew assembleRelease && mv app/build/outputs/apk/release/app-release.apk unSignedRelease.apk";
-  // const result = runCommand(comm);
   execSync(`${comm}`, { cwd: `android` });
-
-  // if (!result) process.exit(-1);
 };
 
 export const zipAlignUnSignedApk = ({
@@ -118,9 +114,7 @@ export const zipAlignUnSignedApk = ({
   alignedUnsignedApkName: string;
 }): void => {
   const comm = `zipalign -v -p 4 ${unSignedApk} ${alignedUnsignedApkName} `;
-  // const result = runCommand(comm);
 
-  // if (!result) process.exit(-1);
   execSync(`${comm}`, { cwd: `android` });
 };
 export const generateSignedApk = ({
@@ -154,19 +148,15 @@ export const verifySignedApk = ({
 export const generateUnsignedDebugAab = (): void => {
   const comm =
     "./gradlew bundleDebug && mv app/build/outputs/bundle/debug/app-debug.aab unSignedDebug.aab";
-  // const result = runCommand(comm);
 
-  // if (!result) process.exit(-1);
   execSync(`${comm}`, { cwd: `android` });
 };
 
 export const generateUnsignedReleaseAab = (): void => {
   const comm =
     "./gradlew bundleRelease && mv app/build/outputs/bundle/release/app-release.aab unSignedRelease.aab";
-  // const result = runCommand(comm);
   execSync(`${comm}`, { cwd: `android` });
 
-  // if (!result) process.exit(-1);
 };
 
 export const zipAlignUnSignedAab = ({
@@ -177,10 +167,7 @@ export const zipAlignUnSignedAab = ({
   alignedUnsignedAabName: string;
 }): void => {
   const comm = ` zipalign -v -p 4 ${unSignedAab} ${alignedUnsignedAabName} `;
-  // const result = runCommand(comm);
   execSync(`${comm}`, { cwd: `android` });
-
-  // if (!result) process.exit(-1);
 };
 
 export const generateSignedAab = ({

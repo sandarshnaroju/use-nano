@@ -3,7 +3,7 @@ import { hideBin } from "yargs/helpers";
 import {
   generateAabWhenKeyStoreExists,
   generateDebugAabWhenKeyStoreExists,
-} from "../app-release/androidRelease.js";
+} from "../app-release/android-release.js";
 export const generateAab = (): void => {
   const args = process.argv.slice(2);
 

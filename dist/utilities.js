@@ -6,12 +6,11 @@ export function downloadFileWithCallback(url, path, callback) {
         .get(url, function (response) {
         response.pipe(file);
         file.on("finish", function () {
-            file.close(callback); // close() is async, call callback after close completes.
+            file.close(callback);
         });
     })
         .on("error", function (err) {
-        // Handle errors
-        fs.unlink(path, () => { }); // Delete the file async. (But we don't check the result)
+        fs.unlink(path, () => { });
         if (callback)
             callback(err.message);
     });

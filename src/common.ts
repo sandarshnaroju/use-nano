@@ -1,7 +1,6 @@
 import { execSync, exec } from "child_process";
 
 import fs from "fs";
-import { COMMAND_ARGUMENTS } from "./constants.js";
 export const runCommand = (command: string): boolean => {
   try {
     execSync(`${command}`);
@@ -10,53 +9,6 @@ export const runCommand = (command: string): boolean => {
     return false;
   }
   return true;
-};
-
-type VersionTuple = [string | null, string | null];
-interface Args {
-  firstArgCommand: string | COMMAND_ARGUMENTS | null;
-  firstArgValue: string | null;
-  secondArgCommand: string | COMMAND_ARGUMENTS | null;
-  secondArgValue: string | null;
-}
-export const getNanoVersionAndReactNativeVersion = ({
-  firstArgCommand,
-  firstArgValue,
-  secondArgCommand,
-  secondArgValue,
-}: Args): VersionTuple => {
-  // returns [nanoVersion, react native version]
-
-  if (secondArgCommand != null && secondArgValue != null) {
-    if (firstArgCommand == COMMAND_ARGUMENTS.NANO_VERSION) {
-      if (secondArgCommand == COMMAND_ARGUMENTS.REACT_NATIVE_VERSION) {
-        // provided both
-        return [firstArgValue, secondArgValue];
-      } else {
-        return [firstArgValue, null];
-      }
-    } else if (firstArgCommand == COMMAND_ARGUMENTS.REACT_NATIVE_VERSION) {
-      if (secondArgCommand == COMMAND_ARGUMENTS.NANO_VERSION) {
-        return [secondArgValue, firstArgValue];
-      } else {
-        return [null, firstArgValue];
-      }
-    }
-  } else {
-    // only one param is given i.e first param
-    if (firstArgCommand == COMMAND_ARGUMENTS.NANO_VERSION) {
-      // provided only nano version
-      return [firstArgValue, null];
-    } else if (firstArgCommand == COMMAND_ARGUMENTS.REACT_NATIVE_VERSION) {
-      // provided only react native version
-
-      return [null, firstArgValue];
-    } else {
-      // provided none
-      return [null, null];
-    }
-  }
-  return [null, null];
 };
 
 export const moveFile = ({
@@ -76,60 +28,6 @@ export const moveFile = ({
   }
   const downloadresult = runCommand(downloadAppjsCommand);
   if (!downloadresult) process.exit(-1);
-};
-
-enum KEYSTORE_ARGUMENTS {
-  PATH = "--keystore",
-  PASSWORD = "--keystorepassword",
-}
-
-type KeystoreInfo = [string | null, string | null];
-
-interface KeystoreArgs {
-  firstArgCommand: KEYSTORE_ARGUMENTS | null;
-  firstArgValue: string | null;
-  secondArgCommand: KEYSTORE_ARGUMENTS | null;
-  secondArgValue: string | null;
-}
-
-export const getKeystorePathAndPasswordArray = ({
-  firstArgCommand,
-  firstArgValue,
-  secondArgCommand,
-  secondArgValue,
-}: KeystoreArgs): KeystoreInfo => {
-  // returns [keystorepath, password]
-
-  if (secondArgCommand != null && secondArgValue != null) {
-    if (firstArgCommand == KEYSTORE_ARGUMENTS.PATH) {
-      if (secondArgCommand == KEYSTORE_ARGUMENTS.PASSWORD) {
-        // provided both
-        return [firstArgValue, secondArgValue];
-      } else {
-        return [firstArgValue, null];
-      }
-    } else if (firstArgCommand == KEYSTORE_ARGUMENTS.PASSWORD) {
-      if (secondArgCommand == KEYSTORE_ARGUMENTS.PATH) {
-        return [secondArgValue, firstArgValue];
-      } else {
-        return [null, firstArgValue];
-      }
-    }
-  } else {
-    // only one param is given i.e first param
-    if (firstArgCommand == KEYSTORE_ARGUMENTS.PATH) {
-      // provided only PATH
-      return [firstArgValue, null];
-    } else if (firstArgCommand == KEYSTORE_ARGUMENTS.PASSWORD) {
-      // provided only password
-
-      return [null, firstArgValue];
-    } else {
-      // provided none
-      return [null, null];
-    }
-  }
-  return [null, null];
 };
 
 export const moveFileByNode = (

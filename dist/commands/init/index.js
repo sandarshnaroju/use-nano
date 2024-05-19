@@ -2,6 +2,7 @@ import inquirer from "inquirer";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { createProjectWithSyncEnabled, setUpANewMinimalProject, } from "./installations.js";
+import { COMMAND_ARGUMENTS } from "../../constants.js";
 export const initProjectCreation = ({ repoName, }) => {
     const argv2 = yargs(hideBin(process.argv)).argv;
     inquirer
@@ -26,15 +27,17 @@ export const initProjectCreation = ({ repoName, }) => {
                 case "a":
                     setUpANewMinimalProject({
                         repoName,
-                        nanoversion: argv2["nano-version" /* COMMAND_ARGUMENTS.NANO_VERSION */],
-                        reactNativeVers: argv2["react-native-version" /* COMMAND_ARGUMENTS.REACT_NATIVE_VERSION */],
+                        nanoversion: argv2[COMMAND_ARGUMENTS.NANO_VERSION],
+                        reactNativeVers: argv2[COMMAND_ARGUMENTS.REACT_NATIVE_VERSION],
+                        userArgs: argv2,
                     });
                     break;
                 case "b":
                     createProjectWithSyncEnabled({
                         projectName: repoName,
-                        nanoversion: argv2["nano-version" /* COMMAND_ARGUMENTS.NANO_VERSION */],
-                        reactNativeVers: argv2["react-native-version" /* COMMAND_ARGUMENTS.REACT_NATIVE_VERSION */],
+                        nanoversion: argv2[COMMAND_ARGUMENTS.NANO_VERSION],
+                        reactNativeVers: argv2[COMMAND_ARGUMENTS.REACT_NATIVE_VERSION],
+                        userArgs: argv2,
                     });
                     break;
                 default:
@@ -44,10 +47,8 @@ export const initProjectCreation = ({ repoName, }) => {
     })
         .catch((error) => {
         if (error.isTtyError) {
-            // Prompt couldn't be rendered in the current environment
         }
         else {
-            // Something else went wrong
         }
     });
 };

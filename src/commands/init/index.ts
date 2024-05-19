@@ -38,6 +38,7 @@ export const initProjectCreation = ({
               repoName,
               nanoversion: argv2[COMMAND_ARGUMENTS.NANO_VERSION],
               reactNativeVers: argv2[COMMAND_ARGUMENTS.REACT_NATIVE_VERSION],
+              userArgs: argv2,
             });
             break;
 
@@ -46,6 +47,7 @@ export const initProjectCreation = ({
               projectName: repoName,
               nanoversion: argv2[COMMAND_ARGUMENTS.NANO_VERSION],
               reactNativeVers: argv2[COMMAND_ARGUMENTS.REACT_NATIVE_VERSION],
+              userArgs: argv2,
             });
 
             break;
@@ -56,9 +58,7 @@ export const initProjectCreation = ({
     })
     .catch((error) => {
       if (error.isTtyError) {
-        // Prompt couldn't be rendered in the current environment
       } else {
-        // Something else went wrong
       }
     });
 };

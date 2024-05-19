@@ -20,7 +20,6 @@ export const changeJavaFilesForVectorIcons = ({ repoName, }) => {
                 fs.appendFileSync(`${repoName}/build.gradle`, array[i] + "\n");
             }
         }
-        // fs.unlinkSync(`${repoName}/android/app/build.gradle`);
         console.log("Build.gradle moving");
         moveFileByNode(`${repoName}/build.gradle`, `${repoName}/android/app/build.gradle`, () => {
             console.log("Downloading Assets.zip");
@@ -33,8 +32,7 @@ export const changeJavaFilesForVectorIcons = ({ repoName, }) => {
                     fs.unlinkSync(`${repoName}/android/app/src/main/assets.zip`);
                 })
                     .catch(() => { });
-                console.log("Extravtedd assets.zip");
-                // process.exit(0);
+                console.log("Extracted assets.zip");
                 return null;
             });
             return null;
