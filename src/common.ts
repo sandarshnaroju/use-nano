@@ -1,8 +1,7 @@
 import { execSync, exec } from "child_process";
 
 import fs from "fs";
-import { COMMAND_ARGUMENTS } from "./Constants.js";
-export const runCommand = (command: string) => {
+export const runCommand = (command: string): boolean => {
   try {
     execSync(`${command}`);
   } catch (e) {
@@ -11,60 +10,16 @@ export const runCommand = (command: string) => {
   }
   return true;
 };
-// enum COMMAND_ARGUMENTS {
-//   NANO_VERSION = "--nano-version",
-//   REACT_NATIVE_VERSION = "--react-native-version",
-// }
 
-type VersionTuple = [string | null, string | null];
-interface Args {
-  firstArgCommand: string | COMMAND_ARGUMENTS | null;
-  firstArgValue: string | null;
-  secondArgCommand: string | COMMAND_ARGUMENTS | null;
-  secondArgValue: string | null;
-}
-export const getNanoVersionAndReactNativeVersion = ({
-  firstArgCommand,
-  firstArgValue,
-  secondArgCommand,
-  secondArgValue,
-}: Args): VersionTuple => {
-  // returns [nanoVersion, react native version]
-
-  if (secondArgCommand != null && secondArgValue != null) {
-    if (firstArgCommand == COMMAND_ARGUMENTS.NANO_VERSION) {
-      if (secondArgCommand == COMMAND_ARGUMENTS.REACT_NATIVE_VERSION) {
-        // provided both
-        return [firstArgValue, secondArgValue];
-      } else {
-        return [firstArgValue, null];
-      }
-    } else if (firstArgCommand == COMMAND_ARGUMENTS.REACT_NATIVE_VERSION) {
-      if (secondArgCommand == COMMAND_ARGUMENTS.NANO_VERSION) {
-        return [secondArgValue, firstArgValue];
-      } else {
-        return [null, firstArgValue];
-      }
-    }
-  } else {
-    // only one param is given i.e first param
-    if (firstArgCommand == COMMAND_ARGUMENTS.NANO_VERSION) {
-      // provided only nano version
-      return [firstArgValue, null];
-    } else if (firstArgCommand == COMMAND_ARGUMENTS.REACT_NATIVE_VERSION) {
-      // provided only react native version
-
-      return [null, firstArgValue];
-    } else {
-      // provided none
-      return [null, null];
-    }
-  }
-  return [null, null];
-};
-
-
-export const moveFile = ({ path, source, destination }) => {
+export const moveFile = ({
+  path,
+  source,
+  destination,
+}: {
+  path: string;
+  source: string;
+  destination: string;
+}): void => {
   let downloadAppjsCommand = "";
   if (path) {
     downloadAppjsCommand = `cd ${path} && mv ${source} ${destination}`;
@@ -75,67 +30,17 @@ export const moveFile = ({ path, source, destination }) => {
   if (!downloadresult) process.exit(-1);
 };
 
-enum KEYSTORE_ARGUMENTS {
-  PATH = "--keystore",
-  PASSWORD = "--keystorepassword",
-}
-
-type KeystoreInfo = [string | null, string | null];
-
-interface KeystoreArgs {
-  firstArgCommand: KEYSTORE_ARGUMENTS | null;
-  firstArgValue: string | null;
-  secondArgCommand: KEYSTORE_ARGUMENTS | null;
-  secondArgValue: string | null;
-}
-
-export const getKeystorePathAndPasswordArray = ({
-  firstArgCommand,
-  firstArgValue,
-  secondArgCommand,
-  secondArgValue,
-}: KeystoreArgs): KeystoreInfo => {
-  // returns [keystorepath, password]
-
-  if (secondArgCommand != null && secondArgValue != null) {
-    if (firstArgCommand == KEYSTORE_ARGUMENTS.PATH) {
-      if (secondArgCommand == KEYSTORE_ARGUMENTS.PASSWORD) {
-        // provided both
-        return [firstArgValue, secondArgValue];
-      } else {
-        return [firstArgValue, null];
-      }
-    } else if (firstArgCommand == KEYSTORE_ARGUMENTS.PASSWORD) {
-      if (secondArgCommand == KEYSTORE_ARGUMENTS.PATH) {
-        return [secondArgValue, firstArgValue];
-      } else {
-        return [null, firstArgValue];
-      }
-    }
-  } else {
-    // only one param is given i.e first param
-    if (firstArgCommand == KEYSTORE_ARGUMENTS.PATH) {
-      // provided only PATH
-      return [firstArgValue, null];
-    } else if (firstArgCommand == KEYSTORE_ARGUMENTS.PASSWORD) {
-      // provided only password
-
-      return [null, firstArgValue];
-    } else {
-      // provided none
-      return [null, null];
-    }
-  }
-  return [null, null];
-};
-
-export const moveFileByNode = (oldPath, newPath, callback) => {
+export const moveFileByNode = (
+  oldPath: string,
+  newPath: string,
+  callback: () => {}
+): void => {
   fs.rename(oldPath, newPath, function (err) {
     if (err) {
       if (err.code === "EXDEV") {
         copy();
       } else {
-        callback(err);
+        callback();
       }
       return;
     }
