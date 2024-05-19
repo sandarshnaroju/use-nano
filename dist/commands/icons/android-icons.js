@@ -13,7 +13,6 @@ export const setupAndroidIcons = () => {
         var array = data.toString().split("\n");
         for (let i = 0; i < array.length; i++) {
             if (array[i].includes("dependencies {")) {
-                console.log("found", array[i], array[i + 1]);
                 fs.appendFileSync(`build.gradle`, array[i] + "\n");
                 fs.appendFileSync(`build.gradle`, `     implementation project(":react-native-vector-icons") \n`);
             }
@@ -23,7 +22,6 @@ export const setupAndroidIcons = () => {
         }
         /*fs.unlinkSync(`${repoName}/android/app/build.gradle`); */
         moveFileByNode(`build.gradle`, `android/app/build.gradle`, () => {
-            console.log("MOVEDD succeddudu");
             downloadFileWithCallback(commonUrl + "assets.zip", "android/app/src/main", () => {
                 console.log("assets.zip downloaded");
                 extract("android/app/src/main/assets.zip", {

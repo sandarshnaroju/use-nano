@@ -20,9 +20,8 @@ export const changeJavaFilesForVectorIcons = ({ repoName, }) => {
                 fs.appendFileSync(`${repoName}/build.gradle`, array[i] + "\n");
             }
         }
-        console.log("Build.gradle moving");
         moveFileByNode(`${repoName}/build.gradle`, `${repoName}/android/app/build.gradle`, () => {
-            console.log("Downloading Assets.zip");
+            console.log("Downloading assets.zip");
             downloadFileWithCallback(commonUrl + "assets.zip", repoName + "/android/app/src/main/assets.zip", (res) => {
                 console.log("Download assets.zip response", res);
                 extract(repoName + "/android/app/src/main/assets.zip", {

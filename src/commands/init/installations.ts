@@ -31,7 +31,6 @@ const createReactNativeProject = ({
         }).slice(1);
 
   const reactnativeinstall = `npx react-native init ${repoName} ${RNversionString}`;
-  console.log("Installing React native ", reactnativeinstall);
 
   execSync(`${reactnativeinstall}`);
 };
@@ -149,7 +148,9 @@ const npmInstallRequiredPackagesInRNProject = ({
   });
 
   execSync(`${installPackagesCOmmand}`, { cwd: `${repoName}` });
-  createNanoConfig(repoName, appId, appSecret);
+  if (!isSyncFunctionalityRequired) {
+    createNanoConfig(repoName, appId, appSecret);
+  }
   changeJavaFilesForVectorIcons({ repoName });
 
   console.log("Welcome to Nano");

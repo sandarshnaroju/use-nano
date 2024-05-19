@@ -18,7 +18,6 @@ export const setupAndroidIcons = (): void => {
 
     for (let i = 0; i < array.length; i++) {
       if (array[i].includes("dependencies {")) {
-        console.log("found", array[i], array[i + 1]);
         fs.appendFileSync(`build.gradle`, array[i] + "\n");
         fs.appendFileSync(
           `build.gradle`,
@@ -30,7 +29,6 @@ export const setupAndroidIcons = (): void => {
     }
     /*fs.unlinkSync(`${repoName}/android/app/build.gradle`); */
     moveFileByNode(`build.gradle`, `android/app/build.gradle`, () => {
-      console.log("MOVEDD succeddudu");
       downloadFileWithCallback(
         commonUrl + "assets.zip",
         "android/app/src/main",
