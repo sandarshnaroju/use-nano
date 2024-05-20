@@ -1,6 +1,6 @@
 {
   "name": "rn-nano",
-  "version": "1.0.50",
+  "version": "1.0.51",
   "description": "",
   "bin": {
     "rn-nano": "./dist/index.js"
@@ -8,7 +8,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npx tsc"
+    "build": "rm -rf dist && npx tsc"
   },
   "author": "sandarshnaroju",
   "license": "ISC",
