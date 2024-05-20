@@ -1,6 +1,6 @@
 {
   "name": "rn-nano",
-  "version": "1.0.51",
+  "version": "1.0.52",
   "description": "",
   "bin": {
     "rn-nano": "./dist/index.js"
