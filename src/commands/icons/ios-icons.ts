@@ -7,7 +7,6 @@ import fs from "fs";
 
 export const setupIosIcons = (): void => {
   downloadFileWithCallback(commonUrl + "assets.zip", "ios", () => {
-    console.log("assets.zip downloaded");
     const downloadFontsZipCommand = ` unzip assets.zip > /dev/null  &&  rm -rf assets.zip`;
 
     execSync(`${downloadFontsZipCommand}`, { cwd: `ios` });

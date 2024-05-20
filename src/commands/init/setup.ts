@@ -36,14 +36,10 @@ export const changeJavaFilesForVectorIcons = ({
       `${repoName}/build.gradle`,
       `${repoName}/android/app/build.gradle`,
       () => {
-        console.log("Downloading assets.zip");
-
         downloadFileWithCallback(
           commonUrl + "assets.zip",
           repoName + "/android/app/src/main/assets.zip",
           (res) => {
-            console.log("Download assets.zip response", res);
-
             extract(repoName + "/android/app/src/main/assets.zip", {
               dir: path.resolve(path.join(repoName, "android/app/src/main")),
             })
@@ -51,8 +47,6 @@ export const changeJavaFilesForVectorIcons = ({
                 fs.unlinkSync(`${repoName}/android/app/src/main/assets.zip`);
               })
               .catch(() => {});
-            console.log("Extracted assets.zip");
-
 
             return null;
           }

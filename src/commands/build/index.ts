@@ -16,19 +16,11 @@ export const build = (): void => {
   const argv = yargs(hideBin(process.argv)).argv;
   if (argv) {
     if (argv.name && typeof argv.name == "string") {
-      console.log("Creating project ", argv.name);
       const command = `npx rn-nano init ${argv.name}`;
       const commandRes = runCommand(command);
       if (!commandRes) process.exit(-1);
     }
-    // if (argv.rename && typeof argv.rename == "string") {
-    //   console.log("Renaming project to ", argv.rename);
-    //   let command = `"${argv.rename}"`;
-    //   if (argv.packagename && typeof argv.packagename == "string") {
-    //     command = command + ` -b "${argv.packagename}"`;
-    //   }
-    //   renameAndroidProject({ userCommand: command });
-    // }
+
     if (argv.launchericon && typeof argv.launchericon == "string") {
       createLauncherIcon({ userCommand: `create ${argv.launchericon}` });
     }

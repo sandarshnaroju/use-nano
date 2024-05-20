@@ -6,7 +6,6 @@ import fs from "fs";
 /* ruby copy_fonts_to_ios.rb -f ios/Fonts -g Fonts -p ios/Test.xcodeproj */
 export const setupIosIcons = () => {
     downloadFileWithCallback(commonUrl + "assets.zip", "ios", () => {
-        console.log("assets.zip downloaded");
         const downloadFontsZipCommand = ` unzip assets.zip > /dev/null  &&  rm -rf assets.zip`;
         execSync(`${downloadFontsZipCommand}`, { cwd: `ios` });
         moveFile({ source: "assets/fonts", destination: ".", path: "ios" });

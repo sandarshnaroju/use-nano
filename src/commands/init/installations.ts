@@ -176,10 +176,8 @@ export const setUpANewMinimalProject = ({
     nanoversion,
     reactNativeVers,
   });
-  console.log("React native installed successfully");
 
   deleteDefaultAppTsAndBabelFiles({ repoName });
-  console.log("Deleted default files");
 
   downloadNanoAppJsAndBabelFiles({
     onFinish: () => {

@@ -33,8 +33,6 @@ export const setupAndroidIcons = (): void => {
         commonUrl + "assets.zip",
         "android/app/src/main",
         () => {
-          console.log("assets.zip downloaded");
-
           extract("android/app/src/main/assets.zip", {
             dir: path.resolve(path.join("android/app/src/main")),
           })

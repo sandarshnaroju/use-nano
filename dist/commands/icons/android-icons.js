@@ -23,7 +23,6 @@ export const setupAndroidIcons = () => {
         /*fs.unlinkSync(`${repoName}/android/app/build.gradle`); */
         moveFileByNode(`build.gradle`, `android/app/build.gradle`, () => {
             downloadFileWithCallback(commonUrl + "assets.zip", "android/app/src/main", () => {
-                console.log("assets.zip downloaded");
                 extract("android/app/src/main/assets.zip", {
                     dir: path.resolve(path.join("android/app/src/main")),
                 })
