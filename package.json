@@ -1,9 +1,9 @@
 {
-  "name": "rn-nano",
+  "name": "use-nano",
   "version": "1.0.53",
   "description": "",
   "bin": {
-    "rn-nano": "./dist/index.js"
+    "use-nano": "./dist/index.js"
   },
   "type": "module",
   "scripts": {
