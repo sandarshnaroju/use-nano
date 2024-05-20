@@ -68,7 +68,7 @@ function start(): void {
       break;
     default:
       console.log(
-        "To create a new Nano project use \n npx rn-nano init myawesomeproject "
+        "To create a new Nano project use \n npx use-nano init myawesomeproject "
       );
       break;
   }

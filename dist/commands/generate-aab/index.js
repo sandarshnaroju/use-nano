@@ -4,7 +4,7 @@ import { generateAabWhenKeyStoreExists, generateDebugAabWhenKeyStoreExists, } fr
 export const generateAab = () => {
     const args = process.argv.slice(2);
     const keyStorePat = args.slice(1);
-    /* npx rn-nano generate-aab release/debug --keystore <keystore file path> --keystorepassword <keystore password > */
+    /* npx use-nano generate-aab release/debug --keystore <keystore file path> --keystorepassword <keystore password > */
     if (keyStorePat[0] != null &&
         (keyStorePat[0] == "release" || keyStorePat[0] == "debug")) {
         const argv = yargs(hideBin(process.argv)).argv;

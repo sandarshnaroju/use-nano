@@ -50,7 +50,7 @@ function start() {
             build();
             break;
         default:
-            console.log("To create a new Nano project use \n npx rn-nano init myawesomeproject ");
+            console.log("To create a new Nano project use \n npx use-nano init myawesomeproject ");
             break;
     }
 }

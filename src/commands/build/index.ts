@@ -9,14 +9,14 @@ import {
   generateDebugApkWhenKeyStoreExists,
 } from "../app-release/android-release.js";
 export const build = (): void => {
-  /* npx rn-nano build --name <newname> --launchericon <launcherIconPath> --keystorefile <keystore file>
-       npx rn-nano --generateapk release/debug --generatedapkname <apkname.apk> --keystore <keystore file path> --keystorepassword <keystore password >
-       npx rn-nano --generateaab release/debug --generatedaabname <apkname.aab> --keystore <keystore file path> --keystorepassword <keystore password > */
+  /* npx use-nano build --name <newname> --launchericon <launcherIconPath> --keystorefile <keystore file>
+       npx use-nano --generateapk release/debug --generatedapkname <apkname.apk> --keystore <keystore file path> --keystorepassword <keystore password >
+       npx use-nano --generateaab release/debug --generatedaabname <apkname.aab> --keystore <keystore file path> --keystorepassword <keystore password > */
 
   const argv = yargs(hideBin(process.argv)).argv;
   if (argv) {
     if (argv.name && typeof argv.name == "string") {
-      const command = `npx rn-nano init ${argv.name}`;
+      const command = `npx use-nano init ${argv.name}`;
       const commandRes = runCommand(command);
       if (!commandRes) process.exit(-1);
     }
