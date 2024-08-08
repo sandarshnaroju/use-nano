@@ -57,11 +57,11 @@ const generateInstallationCommandWithVersions = ({ nanoVersion, isSyncFunctional
     else {
         const versionsArray = Object.keys(VERSIONS);
         let latestVersion = versionsArray[0];
-        for (const version in versionsArray) {
+        versionsArray.forEach((version) => {
             if (!latestVersion || version > latestVersion) {
                 latestVersion = version;
             }
-        }
+        });
         Object.keys(VERSIONS[latestVersion]).forEach((packagename) => {
             if (packagename !== "react-native") {
                 finalCommand += ` ${packagename}@${VERSIONS[latestVersion][packagename]}  `;
