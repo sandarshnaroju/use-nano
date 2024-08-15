@@ -8,6 +8,7 @@ import { generateApk } from "./commands/generate-apk/index.js";
 import { generateAab } from "./commands/generate-aab/index.js";
 import { build } from "./commands/build/index.js";
 import { askUserInfoToGenerateKeyStoreFile } from "./commands/generate-keystore/index.js";
+import { convertDocsToPdf } from "./commands/md-to-pdf/md-to-pdf.js";
 const args = process.argv.slice(2);
 const command = args[0];
 const repoName = args[1];
@@ -48,6 +49,12 @@ function start() {
             break;
         case "build":
             build();
+            break;
+        case "md-to-pdf":
+            const docsPath = args[1];
+            const resultPdfName = args[2];
+            const restArgs = args.slice(3).join(" ");
+            convertDocsToPdf({ dirPath: docsPath, resultPdfName, restArgs });
             break;
         default:
             console.log("To create a new Nano project use \n npx use-nano init myawesomeproject ");
