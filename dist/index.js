@@ -53,8 +53,7 @@ function start() {
         case "md-to-pdf":
             const docsPath = args[1];
             const resultPdfName = args[2];
-            const restArgs = args.slice(3).join(" ");
-            convertDocsToPdf({ dirPath: docsPath, resultPdfName, restArgs });
+            convertDocsToPdf({ dirPath: docsPath, resultPdfName });
             break;
         default:
             console.log("To create a new Nano project use \n npx use-nano init myawesomeproject ");

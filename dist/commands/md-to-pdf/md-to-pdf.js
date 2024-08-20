@@ -1,6 +1,29 @@
 import fs from "fs";
 import path from "path";
+import yargs from "yargs";
+import { hideBin } from "yargs/helpers";
 import { runCommand } from "../../common.js";
+const indexOfAfter = (searchString, afterString, str) => {
+    // Find the index of the 'afterString'
+    const afterIndex = str.indexOf(afterString);
+    if (afterIndex === -1) {
+        // 'afterString' not found in 'str'
+        return -1;
+    }
+    // Move past the 'afterString'
+    const startIndex = afterIndex + afterString.length;
+    // Find the index of 'searchString' starting from 'startIndex'
+    return str.indexOf(searchString, startIndex);
+};
+const removingEditorComponentString = ({ fileContent, }) => {
+    const startIndex = fileContent.indexOf("<Editor");
+    const endIndex = indexOfAfter("}/>", "<Editor", fileContent);
+    if (startIndex > -1 && endIndex > -1) {
+        const resultString = fileContent.slice(0, startIndex) + fileContent.slice(endIndex + 3);
+        return resultString;
+    }
+    return fileContent;
+};
 async function traverseDir(dirPath) {
     const result = {};
     let folderPosition = null;
@@ -42,7 +65,10 @@ const appendContentToFile = async (pathObj, fileName = "final.md") => {
             if (typeof pathObj[key] == "string") {
                 fs.appendFileSync(fileName, `\n`, "utf-8");
                 const cleanedString = removeSidebarPosition(fs.readFileSync(pathObj[key]).toString());
-                fs.appendFileSync(fileName, cleanedString, "utf-8");
+                const stringWithEditorCodeRemoved = removingEditorComponentString({
+                    fileContent: cleanedString,
+                });
+                fs.appendFileSync(fileName, stringWithEditorCodeRemoved, "utf-8");
                 fs.appendFileSync(fileName, `\n`, "utf-8");
             }
             else if (typeof pathObj[key] === "object") {
@@ -51,7 +77,9 @@ const appendContentToFile = async (pathObj, fileName = "final.md") => {
         }
     }
 };
-export const convertDocsToPdf = ({ dirPath, resultPdfName = "final", restArgs = " ", }) => {
+export const convertDocsToPdf = ({ dirPath, resultPdfName = "final", }) => {
+    const argv = yargs(hideBin(process.argv)).argv;
+    const restArgs = argv["md-to-pdf-args"] != null ? argv["md-to-pdf-args"] : " ";
     traverseDir(dirPath)
         .then(async (result) => {
         if (result && result[0]) {
@@ -61,6 +89,12 @@ export const convertDocsToPdf = ({ dirPath, resultPdfName = "final", restArgs = 
             }
             appendContentToFile(resObj, resultPdfName + ".md");
             if (fs.existsSync(resultPdfName + ".md")) {
+                if (argv["regex-pattern"] != null) {
+                    let fileContent = fs.readFileSync(resultPdfName + ".md").toString();
+                    const regex = new RegExp(argv["regex-pattern"], argv["regex-flag"] != null ? argv["regex-flag"] : "");
+                    fileContent = fileContent.replace(regex, argv.replacement);
+                    fs.writeFileSync(resultPdfName + ".md", fileContent);
+                }
                 const result = runCommand(`npx md-to-pdf ${resultPdfName}.md ${restArgs}`);
                 if (!result)
                     process.exit(-1);

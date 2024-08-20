@@ -1,5 +1,4 @@
 #! /usr/bin/env node
-
 import { setupAndroidIcons } from "./commands/icons/android-icons.js";
 import { setupIosIcons } from "./commands/icons/ios-icons.js";
 import { createLauncherIcon } from "./commands/launcher-icon/launcher-icon.js";
@@ -15,6 +14,7 @@ import { convertDocsToPdf } from "./commands/md-to-pdf/md-to-pdf.js";
 const args = process.argv.slice(2);
 const command = args[0];
 const repoName = args[1];
+
 function start(): void {
   switch (command) {
     case "init":
@@ -69,9 +69,8 @@ function start(): void {
     case "md-to-pdf":
       const docsPath = args[1];
       const resultPdfName = args[2];
-      const restArgs = args.slice(3).join(" ");
 
-      convertDocsToPdf({ dirPath: docsPath, resultPdfName, restArgs });
+      convertDocsToPdf({ dirPath: docsPath, resultPdfName });
 
       break;
     default:
