@@ -4,26 +4,26 @@ import { generateAabWhenKeyStoreExists, generateDebugAabWhenKeyStoreExists, } fr
 export const generateAab = () => {
     const args = process.argv.slice(2);
     const keyStorePat = args.slice(1);
-    /* npx use-nano generate-aab release/debug --keystore <keystore file path> --keystorepassword <keystore password > */
+    /* npx use-nano generate-aab release/debug --keystore <keystore file path> --keystore-password <keystore password > */
     if (keyStorePat[0] != null &&
         (keyStorePat[0] == "release" || keyStorePat[0] == "debug")) {
         const argv = yargs(hideBin(process.argv)).argv;
         if (argv != null &&
             argv.keystore != null &&
-            argv.keystorepassword != null &&
-            argv.generatedaab != null) {
+            argv["keystore-password"] != null &&
+            argv["generated-aab"] != null) {
             if (keyStorePat[0] == "release") {
                 generateAabWhenKeyStoreExists({
                     keyStoreName: argv.keystore,
-                    keyStorePassword: argv.keystorepassword,
-                    generatedAabName: argv.generatedaab,
+                    keyStorePassword: argv["keystore-password"],
+                    generatedAabName: argv["generated-aab"],
                 });
             }
             if (keyStorePat[0] == "debug") {
                 generateDebugAabWhenKeyStoreExists({
                     keyStoreName: argv.keystore,
-                    keyStorePassword: argv.keystorepassword,
-                    generatedAabName: argv.generatedaab,
+                    keyStorePassword: argv["keystore-password"],
+                    generatedAabName: argv["generated-aab"],
                 });
             }
         }

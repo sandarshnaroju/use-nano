@@ -70,7 +70,7 @@ export const generateUnsignedDebugApk = () => {
         process.exit(-1);
 };
 export const generateUnsignedReleaseApk = () => {
-    const comm = " ./gradlew assembleRelease && mv app/build/outputs/apk/release/app-release.apk unSignedRelease.apk";
+    const comm = "./gradlew assembleRelease && mv app/build/outputs/apk/release/app-release.apk unSignedRelease.apk";
     execSync(`${comm}`, { cwd: `android` });
 };
 export const zipAlignUnSignedApk = ({ unSignedApk, alignedUnsignedApkName, }) => {

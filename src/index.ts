@@ -14,7 +14,6 @@ import { convertDocsToPdf } from "./commands/md-to-pdf/md-to-pdf.js";
 const args = process.argv.slice(2);
 const command = args[0];
 const repoName = args[1];
-
 function start(): void {
   switch (command) {
     case "init":
