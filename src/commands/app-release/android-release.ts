@@ -102,7 +102,8 @@ export const generateUnsignedDebugApk = (): void => {
 
 export const generateUnsignedReleaseApk = (): void => {
   const comm =
-    " ./gradlew assembleRelease && mv app/build/outputs/apk/release/app-release.apk unSignedRelease.apk";
+    "./gradlew assembleRelease && mv app/build/outputs/apk/release/app-release.apk unSignedRelease.apk";
+
   execSync(`${comm}`, { cwd: `android` });
 };
 
@@ -156,7 +157,6 @@ export const generateUnsignedReleaseAab = (): void => {
   const comm =
     "./gradlew bundleRelease && mv app/build/outputs/bundle/release/app-release.aab unSignedRelease.aab";
   execSync(`${comm}`, { cwd: `android` });
-
 };
 
 export const zipAlignUnSignedAab = ({
