@@ -77,6 +77,57 @@ const appendContentToFile = async (pathObj, fileName = "final.md") => {
         }
     }
 };
+function replaceOccurrences(inputString, replacements) {
+    // Iterate through each replacement object
+    Object.entries(replacements).forEach(([key, value]) => {
+        // Create a regular expression for the 'value' string with global flag and escape special characters
+        const escapedValue = value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // Escape special regex characters
+        const regex = new RegExp(escapedValue, "g");
+        // Replace occurrences of 'value' with 'key'
+        inputString = inputString.replace(regex, key);
+    });
+    return inputString;
+}
+const replacesments = {
+    text: "NANO.TEXT",
+    view: "NANO.BUTTON",
+    activity_indicator: "NANO.ACTIVITY_INDICATOR",
+    avatar_icon: "NANO.AVATAR_ICON",
+    avatar_image: "NANO.AVATAR_IMAGE",
+    avatar_text: "NANO.AVATAR_TEXT",
+    badge: "NANO.BADGE",
+    checkbox: "NANO.CHECKBOX",
+    chip: "NANO.CHIP",
+    fab: "NANO.FAB",
+    progress_bar: "NANO.PROGRESS_BAR",
+    radio_button: "NANO.RADIO_BUTTON",
+    switch: "NANO.SWITCH",
+    text_input: "NANO.TEXT_INPUT",
+    divider: "NANO.DIVIDER",
+    search_bar: "NANO.SEARCH_BAR",
+    segmented_buttons: "NANO.SEGMENTED_BUTTONS",
+    icon_button: "NANO.ICON_BUTTON",
+    helper_text: "NANO.HELPER_TEXT",
+    card: "NANO.CARD",
+    card_title: "NANO.CARD_TITLE",
+    card_content: "NANO.CARD_CONTENT",
+    card_cover: "NANO.CARD_COVER",
+    card_action: "NANO.CARD_ACTION",
+    dialog: "NANO.DIALOG",
+    dialog_title: "NANO.DIALOG_TITLE",
+    dialog_content: "NANO.DIALOG_CONTENT",
+    dialog_scrollarea: "NANO.DIALOG_SCROLLAREA",
+    dialog_action: "NANO.DIALOG_ACTION",
+    tooltip: "NANO.TOOLTIP",
+    scroll_view: "NANO.SCROLL_VIEW",
+    appbar_action: "NANO.APPBAR_ACTION",
+    appbar_content: "NANO.APPBAR_CONTENT",
+    appbar_back_action: "NANO.APPBAR_BACK_ACTION",
+    appbar_header: "NANO.APPBAR_HEADER",
+    modal: "NANO.MODAL",
+    video: "NANO.VIDEO",
+    youtube_player: "NANO.YOUTUBE_PLAYER",
+};
 export const convertDocsToPdf = ({ dirPath, resultPdfName = "final", }) => {
     const argv = yargs(hideBin(process.argv)).argv;
     const restArgs = argv["md-to-pdf-args"] != null ? argv["md-to-pdf-args"] : " ";
