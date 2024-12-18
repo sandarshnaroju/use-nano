@@ -15,7 +15,16 @@ export const generateAab = (): void => {
     (keyStorePat[0] == "release" || keyStorePat[0] == "debug")
   ) {
     const argv = yargs(hideBin(process.argv)).argv;
-
+    if (
+      keyStorePat[0] != null &&
+      keyStorePat[0] == "debug" &&
+      argv["keystore-password"] == null &&
+      argv["keystore"] == null
+    ) {
+      // generateDebugApkWithoutKeystore({
+      //   generatedApkName: argv["generated-apk"],
+      // });
+    }
     if (
       argv != null &&
       argv.keystore != null &&
