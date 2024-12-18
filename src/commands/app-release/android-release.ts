@@ -70,6 +70,29 @@ export const generateDebugApkWhenKeyStoreExists = ({
   cleanupAfterGenerating();
   console.log(` Debug apk : ${generatedApkName} is generated`);
 };
+export const generateDebugApkWithoutKeystore = ({
+  generatedApkName,
+}: {
+  generatedApkName: string;
+}): void => {
+  console.log("Generating unsigned debug apk");
+  /* generate debug apk and copy it from android/app/build/outputs/apk/debug to android/ folder */
+  let comm = null;
+  if (generatedApkName) {
+    const debugApkName = generatedApkName.includes(".apk")
+      ? generatedApkName
+      : generatedApkName + ".apk";
+    comm = `cd android && ./gradlew assembleRelease && mv app/build/outputs/apk/release/app-release.apk ../${debugApkName} `;
+  } else {
+
+    comm = `cd android && ./gradlew assembleRelease && mv app/build/outputs/apk/release/app-release.apk ../debug.apk `;
+  }
+
+
+  const result = runCommand(comm);
+
+  if (!result) process.exit(-1);
+};
 
 export const initialiseApkGeneration = (): void => {
   const filePath = "keystore.jks";
@@ -152,7 +175,29 @@ export const generateUnsignedDebugAab = (): void => {
 
   execSync(`${comm}`, { cwd: `android` });
 };
+export const generateDebugAabWithoutKeystore = ({
+  generatedAabName,
+}: {
+  generatedAabName: string;
+}): void => {
+  console.log("Generating unsigned debug aab");
+  /* generate debug apk and copy it from android/app/build/outputs/apk/debug to android/ folder */
+  let comm = null;
+  if (generatedAabName) {
+    const debugApkName = generatedAabName.includes(".apk")
+      ? generatedAabName
+      : generatedAabName + ".aab";
+    comm = `cd android && ./gradlew bundleDebug && mv app/build/outputs/apk/debug/app-debug.aab ../${generatedAabName} `;
+  } else {
 
+    comm = `cd android && ./gradlew bundleDebug && mv app/build/outputs/apk/debug/app-debug.aab ../debug.aab `;
+  }
+
+
+  const result = runCommand(comm);
+
+  if (!result) process.exit(-1);
+};
 export const generateUnsignedReleaseAab = (): void => {
   const comm =
     "./gradlew bundleRelease && mv app/build/outputs/bundle/release/app-release.aab unSignedRelease.aab";

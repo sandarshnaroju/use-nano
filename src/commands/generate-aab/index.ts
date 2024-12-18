@@ -3,6 +3,7 @@ import { hideBin } from "yargs/helpers";
 import {
   generateAabWhenKeyStoreExists,
   generateDebugAabWhenKeyStoreExists,
+  generateDebugAabWithoutKeystore,
 } from "../app-release/android-release.js";
 export const generateAab = (): void => {
   const args = process.argv.slice(2);
@@ -15,7 +16,16 @@ export const generateAab = (): void => {
     (keyStorePat[0] == "release" || keyStorePat[0] == "debug")
   ) {
     const argv = yargs(hideBin(process.argv)).argv;
-
+    if (
+      keyStorePat[0] != null &&
+      keyStorePat[0] == "debug" &&
+      argv["keystore-password"] == null &&
+      argv["keystore"] == null
+    ) {
+      generateDebugAabWithoutKeystore({
+        generatedAabName: argv["generated-aab"],
+      });
+    }
     if (
       argv != null &&
       argv.keystore != null &&

@@ -30,6 +30,7 @@ const createReactNativeProject = ({
           rnNanoVersion: nanoversion,
         }).slice(1);
 
+        
   const reactnativeinstall = `npx react-native init ${repoName} ${RNversionString}`;
 
   execSync(`${reactnativeinstall}`);
@@ -191,6 +192,72 @@ export const setUpANewMinimalProject = ({
     repoName,
     reactNativeVers: reactNativeVers,
   });
+};
+
+export const createSyncEnabledProjectViaShellCommand = ({
+  projectName,
+  nanoversion,
+  reactNativeVers,
+  userArgs,
+}: {
+  projectName: string;
+  nanoversion?: string;
+  reactNativeVers?: string;
+  userArgs: object;
+}): void => {
+  // creating  sync enabled nano project with shell command
+  // npx use-nano init MyProject --app-id ${appId} --app-secret ${appSecret} --app-url ${appUrl}
+  if (
+    userArgs != null &&
+    userArgs["app-id"] != null &&
+    userArgs["app-secret"] != null &&
+    userArgs["app-url"] != null
+  ) {
+    createReactNativeProject({
+      repoName: projectName,
+      nanoversion,
+      reactNativeVers,
+    });
+    deleteDefaultAppTsAndBabelFiles({ repoName: projectName });
+
+    downloadFileWithCallback(
+      commonUrl + "App3.js",
+      projectName + "/App.js",
+      () => {
+
+        npmInstallRequiredPackagesInRNProject({
+          repoName: projectName,
+          appId: userArgs["app-id"],
+          appSecret: userArgs["app-secret"],
+          nanoversion,
+          isSyncFunctionalityRequired: true,
+          userArgs,
+        });
+
+        return null;
+      }
+    );
+
+    const babelDownloadUrl =
+      reactNativeVers != null
+        ? reactNativeVers > "0.72.0"
+          ? commonUrl + "babel.config2.js"
+          : commonUrl + "babel.config.js"
+        : commonUrl + "babel.config2.js";
+    downloadFileWithCallback(
+      babelDownloadUrl,
+      projectName + "/babel.config.js",
+      () => {
+        addNanoConfigToExistingProject(
+          projectName,
+          userArgs["app-id"],
+          userArgs["app-secret"],
+          userArgs["app-url"]
+        );
+        return null;
+      }
+    );
+  }
 };
 
 export const createProjectWithSyncEnabled = ({
