@@ -10,7 +10,7 @@ import { generateAab } from "./commands/generate-aab/index.js";
 import { build } from "./commands/build/index.js";
 import { askUserInfoToGenerateKeyStoreFile } from "./commands/generate-keystore/index.js";
 import { convertDocsToPdf } from "./commands/md-to-pdf/md-to-pdf.js";
-
+import { changeAppUrlAppIdAppSecretInExistingProject } from "./commands/configure/index.js";
 
 const args = process.argv.slice(2);
 const command = args[0];
@@ -72,6 +72,9 @@ function start(): void {
 
       convertDocsToPdf({ dirPath: docsPath, resultPdfName });
 
+      break;
+    case "configure":
+      changeAppUrlAppIdAppSecretInExistingProject();
       break;
     default:
       console.log(

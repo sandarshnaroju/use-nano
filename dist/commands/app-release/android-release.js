@@ -41,7 +41,7 @@ export const generateDebugApkWhenKeyStoreExists = ({ keyStoreName, keyStorePassw
     cleanupAfterGenerating();
     console.log(` Debug apk : ${generatedApkName} is generated`);
 };
-export const generateDebugApkWithoutKeystore = ({ generatedApkName, }) => {
+export const assembleReleaseApkWithoutKeystore = ({ generatedApkName, }) => {
     console.log("Generating unsigned debug apk");
     /* generate debug apk and copy it from android/app/build/outputs/apk/debug to android/ folder */
     let comm = null;
@@ -53,6 +53,23 @@ export const generateDebugApkWithoutKeystore = ({ generatedApkName, }) => {
     }
     else {
         comm = `cd android && ./gradlew assembleRelease && mv app/build/outputs/apk/release/app-release.apk ../debug.apk `;
+    }
+    const result = runCommand(comm);
+    if (!result)
+        process.exit(-1);
+};
+export const assembleDebugApkWithoutKeystore = ({ generatedApkName, }) => {
+    console.log("Generating unsigned debug apk");
+    /* generate debug apk and copy it from android/app/build/outputs/apk/debug to android/ folder */
+    let comm = null;
+    if (generatedApkName) {
+        const debugApkName = generatedApkName.includes(".apk")
+            ? generatedApkName
+            : generatedApkName + ".apk";
+        comm = `cd android && ./gradlew assembleDebug && mv app/build/outputs/apk/debug/app-debug.apk ../${debugApkName} `;
+    }
+    else {
+        comm = `cd android && ./gradlew assembleDebug && mv app/build/outputs/apk/debug/app-debug.apk ../debug.apk `;
     }
     const result = runCommand(comm);
     if (!result)
@@ -116,13 +133,30 @@ export const generateDebugAabWithoutKeystore = ({ generatedAabName, }) => {
     /* generate debug apk and copy it from android/app/build/outputs/apk/debug to android/ folder */
     let comm = null;
     if (generatedAabName) {
-        const debugApkName = generatedAabName.includes(".apk")
+        const debugAabName = generatedAabName.includes(".aab")
             ? generatedAabName
             : generatedAabName + ".aab";
-        comm = `cd android && ./gradlew bundleDebug && mv app/build/outputs/apk/debug/app-debug.aab ../${generatedAabName} `;
+        comm = `cd android && ./gradlew bundleDebug && mv app/build/outputs/apk/debug/app-debug.aab ../${debugAabName} `;
     }
     else {
         comm = `cd android && ./gradlew bundleDebug && mv app/build/outputs/apk/debug/app-debug.aab ../debug.aab `;
+    }
+    const result = runCommand(comm);
+    if (!result)
+        process.exit(-1);
+};
+export const generateReleaseAabWithoutKeystore = ({ generatedAabName, }) => {
+    console.log("Generating unsigned release aab");
+    /* generate debug apk and copy it from android/app/build/outputs/apk/debug to android/ folder */
+    let comm = null;
+    if (generatedAabName) {
+        const debugAabName = generatedAabName.includes(".aab")
+            ? generatedAabName
+            : generatedAabName + ".aab";
+        comm = `cd android && ./gradlew bundleRelease && mv app/build/outputs/apk/release/app-release.aab ../${debugAabName} `;
+    }
+    else {
+        comm = `cd android && ./gradlew bundleRelease && mv app/build/outputs/apk/release/app-release.aab ../debug.aab `;
     }
     const result = runCommand(comm);
     if (!result)
