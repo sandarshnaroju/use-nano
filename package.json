@@ -1,6 +1,6 @@
 {
   "name": "use-nano",
-  "version": "1.0.61",
+  "version": "1.0.62",
   "description": "",
   "bin": {
     "use-nano": "./dist/index.js"
