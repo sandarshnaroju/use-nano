@@ -1,9 +1,10 @@
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import {
+  assembleDebugApkWithoutKeystore,
+  assembleReleaseApkWithoutKeystore,
   generateApkWhenKeyStoreExists,
   generateDebugApkWhenKeyStoreExists,
-  generateDebugApkWithoutKeystore,
 } from "../app-release/android-release.js";
 export const generateApk = (): void => {
   const args = process.argv.slice(2);
@@ -15,18 +16,28 @@ export const generateApk = (): void => {
     (keyStorePath[0] == "release" || keyStorePath[0] == "debug")
   ) {
     const argv = yargs(hideBin(process.argv)).argv;
-  
+
+    if (
+      keyStorePath[0] != null &&
+      keyStorePath[0] == "release" &&
+      argv["keystore-password"] == null &&
+      argv["keystore"] == null
+    ) {
+      assembleReleaseApkWithoutKeystore({
+        generatedApkName: argv["generated-apk"],
+      });
+    }
     if (
       keyStorePath[0] != null &&
       keyStorePath[0] == "debug" &&
       argv["keystore-password"] == null &&
       argv["keystore"] == null
     ) {
-   
-      generateDebugApkWithoutKeystore({
+      assembleDebugApkWithoutKeystore({
         generatedApkName: argv["generated-apk"],
       });
     }
+
     if (
       argv != null &&
       argv.keystore != null &&
