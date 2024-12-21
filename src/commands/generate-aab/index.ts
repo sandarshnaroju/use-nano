@@ -4,6 +4,7 @@ import {
   generateAabWhenKeyStoreExists,
   generateDebugAabWhenKeyStoreExists,
   generateDebugAabWithoutKeystore,
+  generateReleaseAabWithoutKeystore,
 } from "../app-release/android-release.js";
 export const generateAab = (): void => {
   const args = process.argv.slice(2);
@@ -23,6 +24,16 @@ export const generateAab = (): void => {
       argv["keystore"] == null
     ) {
       generateDebugAabWithoutKeystore({
+        generatedAabName: argv["generated-aab"],
+      });
+    }
+    if (
+      keyStorePat[0] != null &&
+      keyStorePat[0] == "release" &&
+      argv["keystore-password"] == null &&
+      argv["keystore"] == null
+    ) {
+      generateReleaseAabWithoutKeystore({
         generatedAabName: argv["generated-aab"],
       });
     }
