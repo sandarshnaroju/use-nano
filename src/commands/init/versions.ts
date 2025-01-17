@@ -4,7 +4,6 @@ export const VERSIONS = {
     "react-native-reanimated": "^3.9.0",
     realm: "^11.10.2",
     "react-native-rsa-native": "^2.0.5",
-    "react-native-gesture-handler": "^2.22.0",
     "react-native-safe-area-context": "^4.10.1",
     "react-native-screens": "^3.31.1",
     "@notifee/react-native": "^7.8.2",
@@ -31,6 +30,7 @@ export const VERSIONS = {
     "react-native-vector-icons": "9.2.0",
     "react-native-nano": "^1.0.163",
     "rn-nano-sync": "1.0.7",
+    "react-native-gesture-handler": "^2.22.0",
   },
 };
 
