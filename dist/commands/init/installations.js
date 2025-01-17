@@ -14,7 +14,7 @@ const createReactNativeProject = ({ repoName, nanoversion, reactNativeVers, }) =
                 packagename: "react-native",
                 rnNanoVersion: nanoversion,
             }).slice(1);
-    const reactnativeinstall = `npx react-native init ${repoName} ${RNversionString}`;
+    const reactnativeinstall = `npx @react-native-community/cli@latest init ${repoName} ${RNversionString}`;
     execSync(`${reactnativeinstall}`);
 };
 const deleteDefaultAppTsAndBabelFiles = ({ repoName, }) => {
