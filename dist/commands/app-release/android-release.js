@@ -42,7 +42,7 @@ export const generateDebugApkWhenKeyStoreExists = ({ keyStoreName, keyStorePassw
     console.log(` Debug apk : ${generatedApkName} is generated`);
 };
 export const assembleReleaseApkWithoutKeystore = ({ generatedApkName, }) => {
-    console.log("Generating unsigned debug apk");
+    console.log("Generating unsigned release apk");
     /* generate debug apk and copy it from android/app/build/outputs/apk/debug to android/ folder */
     let comm = null;
     if (generatedApkName) {
