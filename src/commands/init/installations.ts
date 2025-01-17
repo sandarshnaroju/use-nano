@@ -96,6 +96,7 @@ const generateInstallationCommandWithVersions = ({
   let finalCommand = "npm install --save";
   if (nanoVersion != null && nanoVersion != "") {
     Object.keys(VERSIONS[nanoVersion]).forEach((packagename) => {
+
       if (packagename !== "react-native") {
         finalCommand += ` ${packagename}@${VERSIONS[nanoVersion][packagename]}  `;
       }
