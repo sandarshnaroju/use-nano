@@ -63,7 +63,6 @@ const generateInstallationCommandWithVersions = ({ nanoVersion, isSyncFunctional
             }
         });
         Object.keys(VERSIONS[latestVersion]).forEach((packagename) => {
-            console.log("PACKAKAK", packagename);
             if (packagename !== "react-native") {
                 finalCommand += ` ${packagename}@${VERSIONS[latestVersion][packagename]}  `;
             }
