@@ -288,11 +288,7 @@ export const initProjectCommand = async (): Promise<void> => {
             console.log("Invalid JSON string passed for packages");
           }
         }
-        if (args["app-icon"] != null) {
-          const command = `cd ${args.name} && npx install -g icon-set-creator && iconset create ../${args["app-icon"]}`;
-          // const command =`cd ${args.name} && npx icon-set-creator create ${args["app-icon"]}`;
-          runCommand(command);
-        }
+       
         const command = `cd ${args.name} && rm -rf node_modules`;
         runCommand(command);
       },
