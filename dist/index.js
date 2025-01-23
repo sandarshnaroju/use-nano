@@ -10,6 +10,7 @@ import { build } from "./commands/build/index.js";
 import { askUserInfoToGenerateKeyStoreFile } from "./commands/generate-keystore/index.js";
 import { convertDocsToPdf } from "./commands/md-to-pdf/md-to-pdf.js";
 import { changeAppUrlAppIdAppSecretInExistingProject } from "./commands/configure/index.js";
+import { initProjectCommand } from "./commands/project/index.js";
 const args = process.argv.slice(2);
 const command = args[0];
 const repoName = args[1];
@@ -58,6 +59,10 @@ function start() {
             break;
         case "configure":
             changeAppUrlAppIdAppSecretInExistingProject();
+            break;
+        case "project":
+            // npx use-nano project --screen <base64> --assets <base64> --app-icon <path string> --packages <base64> --version-code <string> --version-number <integer>
+            initProjectCommand();
             break;
         default:
             console.log("To create a new Nano project use \n npx use-nano init myawesomeproject ");

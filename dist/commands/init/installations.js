@@ -6,7 +6,7 @@ import { downloadFileWithCallback } from "../../utilities.js";
 import { addNanoConfigToExistingProject, changeJavaFilesForVectorIcons, createNanoConfig, } from "./setup.js";
 import { VERSIONS, getPackageVersion } from "./versions.js";
 import inquirer from "inquirer";
-const createReactNativeProject = ({ repoName, nanoversion, reactNativeVers, }) => {
+export const createReactNativeProject = ({ repoName, nanoversion, reactNativeVers, }) => {
     const RNversionString = reactNativeVers != null
         ? `--version ${reactNativeVers}`
         : `--version ` +
@@ -17,7 +17,7 @@ const createReactNativeProject = ({ repoName, nanoversion, reactNativeVers, }) =
     const reactnativeinstall = `npx @react-native-community/cli@latest init ${repoName} ${RNversionString}`;
     execSync(`${reactnativeinstall}`);
 };
-const deleteDefaultAppTsAndBabelFiles = ({ repoName, }) => {
+export const deleteDefaultAppTsAndBabelFiles = ({ repoName, }) => {
     if (fs.existsSync(path.join(repoName, "/App.tsx"))) {
         fs.unlinkSync(path.join(repoName, "/App.tsx"));
     }
@@ -28,7 +28,7 @@ const deleteDefaultAppTsAndBabelFiles = ({ repoName, }) => {
         fs.unlinkSync(path.join(repoName, "/babel.config.js"));
     }
 };
-const downloadNanoAppJsAndBabelFiles = ({ onFinish, repoName, reactNativeVers, }) => {
+export const downloadNanoAppJsAndBabelFiles = ({ onFinish, repoName, reactNativeVers, }) => {
     const babelDownloadUrl = reactNativeVers != null
         ? reactNativeVers > "0.72.0"
             ? commonUrl + "babel.config2.js"
