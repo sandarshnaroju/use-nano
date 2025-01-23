@@ -114,23 +114,17 @@ interface SetupProjectWithScreensParams {
   args: Args;
   onFinish: () => void;
 }
-// const dummyScreensString = `IltcbiAgICB7XG4gICAgICAgIG5hbWU6XCJDb3VudFNjcmVlblwiXG4gICAgICAgIGNvZGU6IGBcbmNvbnN0IGNvdW50VGV4dCA9IHtcbiAgICBjb21wb25lbnQ6IFwidGV4dFwiLFxuICAgIG5hbWU6ICd0ZXh0JyxcbiAgICB2YWx1ZTogMSxcbiAgICBwcm9wczoge1xuICAgICAgICBzdHlsZToge1xuICAgICAgICAgICAgZm9udFNpemU6IDUwLFxuICAgICAgICAgICAgYWxpZ25TZWxmOiAnY2VudGVyJyxcbiAgICAgICAgICAgIGp1c3RpZnlDb250ZW50OiAnY2VudGVyJyxcbiAgICAgICAgfVxuICAgIH1cbn07XG5cbi8vIGNyZWF0aW5nIGEgYnV0dG9uIGNvbXBvbmVudCB0byBjbGljayBhbmQgaW5jcmVhc2UgbnVtYmVycy5cbmNvbnN0IGluY3JlYXNlQ291bnRCdXR0b24gPSB7XG4gICAgY29tcG9uZW50OiBcImJ1dHRvblwiLFxuICAgIHZhbHVlOiAnQ0xJQ0sgTUUgVE8gSU5DUkVBU0UnLFxuICAgIG9uUHJlc3M6ICh7IHNldFVpLCBnZXRVaSB9KSA9PiB7XG5cbiAgICAgICAgLy8gaW5jcmVhc2UgY291bnQgYnkgMVxuICAgICAgICBjb25zdCB0ZXh0T2JqID0gZ2V0VWkoXCJ0ZXh0XCIpXG4gICAgICAgIHRleHRPYmoudmFsdWUgPSB0ZXh0T2JqLnZhbHVlICsgMVxuICAgICAgICBzZXRVaShcInRleHRcIiwgdGV4dE9iailcblxuICAgIH1cbn07XG5cbi8vIEZpbmFsbHkgYWRkaW5nIGJvdGggY29tcG9uZW50cyB0byBzY3JlZW4gd2l0aCB2MSh2ZXJ0aWNhbCkgdGFnLlxuY29uc3Qgc2NyZWVuID0ge1xuICAgIG5hbWU6ICdDb3VudFNjcmVlbicsXG4gICAgc2NyZWVuOiB7XG4gICAgICAgIHYxOiBbY291bnRUZXh0LCBpbmNyZWFzZUNvdW50QnV0dG9uXSxcbiAgICB9LFxuICAgIHByb3BzOiB7XG4gICAgICAgIHN0eWxlOiB7IGZsZXg6IDEsIGp1c3RpZnlDb250ZW50OiAnY2VudGVyJyB9LFxuICAgIH1cbn07XG5gXG4gICAgfSxcbiAgICB7XG4gICAgICAgIG5hbWU6XCJGZWVkU2NyZWVuXCJcbiAgICAgICAgY29kZTogYGNvbnN0IGZlZWRUZXh0ID0ge1xuICAgIG5hbWU6IFwiZmVlZF90ZXh0XCIsXG4gICAgY29tcG9uZW50OiBcInRleHRcIixcbiAgICB2YWx1ZTogJ1RoaXMgaXMgRmVlZCcsXG4gICAgcHJvcHM6IHtcbiAgICAgICAgc3R5bGU6IHtcbiAgICAgICAgICAgIGZvbnRTaXplOiAyNSxcbiAgICAgICAgICAgIGNvbG9yOiBcImJsYWNrXCJcbiAgICAgICAgfSxcbiAgICB9XG59O1xuXG5jb25zdCBzY3JlZW4gPSB7XG4gICAgbmFtZTogJ0ZlZWRTY3JlZW4nLFxuICAgIHNjcmVlbjoge1xuICAgICAgICB2MTogW2ZlZWRUZXh0XSxcbiAgICB9LFxuICAgIHByb3BzOiB7XG4gICAgICAgIHN0eWxlOiB7IGZsZXg6IDEsIGp1c3RpZnlDb250ZW50OiAnY2VudGVyJywgYWxpZ25JdGVtczogJ2NlbnRlcicgfSxcbiAgICAgICAgc2Nyb2xsOiBmYWxzZSxcbiAgICAgICAgc2Nyb2xsVmlld1Byb3BzOiB7fVxuICAgIH1cbn07XG5gXG4gICAgfSxcblxuXSI=
-// `;
+
 const setupProjectWithScreens = ({
   args,
   onFinish,
 }: SetupProjectWithScreensParams): void => {
   const decodedStringifiedScreens = atob(args.screens);
   const decodedScreens: string = JSON.parse(decodedStringifiedScreens);
-  // console.log(
-  //   "decodedScreens",
-  //   decodedScreens,
-  //   typeof decodedScreens,
-  //   decodedStringifiedScreens
-  // );
+ 
   try {
     const parsedScreensArray: Screen[] = eval(decodedScreens);
-    // console.log("parsedScreensArray", parsedScreensArray);
+    
     if (typeof parsedScreensArray === "object" && parsedScreensArray !== null) {
       createReactNativeProject({
         repoName: args.name,
