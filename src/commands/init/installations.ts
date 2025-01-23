@@ -11,7 +11,7 @@ import {
 import { VERSIONS, getPackageVersion } from "./versions.js";
 import inquirer from "inquirer";
 
-const createReactNativeProject = ({
+export const createReactNativeProject = ({
   repoName,
 
   nanoversion,
@@ -30,13 +30,12 @@ const createReactNativeProject = ({
           rnNanoVersion: nanoversion,
         }).slice(1);
 
-        
   const reactnativeinstall = `npx @react-native-community/cli@latest init ${repoName} ${RNversionString}`;
 
   execSync(`${reactnativeinstall}`);
 };
 
-const deleteDefaultAppTsAndBabelFiles = ({
+export const deleteDefaultAppTsAndBabelFiles = ({
   repoName,
 }: {
   repoName: string;
@@ -51,7 +50,7 @@ const deleteDefaultAppTsAndBabelFiles = ({
     fs.unlinkSync(path.join(repoName, "/babel.config.js"));
   }
 };
-const downloadNanoAppJsAndBabelFiles = ({
+export const downloadNanoAppJsAndBabelFiles = ({
   onFinish,
   repoName,
   reactNativeVers,
@@ -96,7 +95,6 @@ const generateInstallationCommandWithVersions = ({
   let finalCommand = "npm install --save";
   if (nanoVersion != null && nanoVersion != "") {
     Object.keys(VERSIONS[nanoVersion]).forEach((packagename) => {
-
       if (packagename !== "react-native") {
         finalCommand += ` ${packagename}@${VERSIONS[nanoVersion][packagename]}  `;
       }
@@ -225,7 +223,6 @@ export const createSyncEnabledProjectViaShellCommand = ({
       commonUrl + "App3.js",
       projectName + "/App.js",
       () => {
-
         npmInstallRequiredPackagesInRNProject({
           repoName: projectName,
           appId: userArgs["app-id"],
