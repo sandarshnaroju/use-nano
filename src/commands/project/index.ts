@@ -19,7 +19,6 @@ import {
   downloadNanoAppJsAndBabelFiles,
 } from "../init/installations.js";
 
-
 async function moveFiles({
   destFolder,
   filePaths,
@@ -47,7 +46,6 @@ async function moveFiles({
   }
 }
 
-
 interface MoveFileParams {
   source: string;
   destination: string;
@@ -60,8 +58,6 @@ async function moveFile({
   await copyFile(source, destination, () => {});
   return "File copied successfully";
 }
-
-
 
 interface SetupAssetsParams {
   assetsObj: Record<string, string[] | null>; // Object with keys as strings and values as arrays of strings or null
@@ -86,7 +82,6 @@ const setupAssets = ({ assetsObj, projectName }: SetupAssetsParams): void => {
 
       textToWrite += `\n"./src/assets/${key}",`;
       console.log(`Moved ${key} assets.`);
-
     }
   });
 
@@ -106,7 +101,6 @@ interface Screen {
   code: string;
 }
 
-
 interface Args {
   name: string;
   screens?: string;
@@ -120,65 +114,79 @@ interface SetupProjectWithScreensParams {
   args: Args;
   onFinish: () => void;
 }
-
+// const dummyScreensString = `IltcbiAgICB7XG4gICAgICAgIG5hbWU6XCJDb3VudFNjcmVlblwiXG4gICAgICAgIGNvZGU6IGBcbmNvbnN0IGNvdW50VGV4dCA9IHtcbiAgICBjb21wb25lbnQ6IFwidGV4dFwiLFxuICAgIG5hbWU6ICd0ZXh0JyxcbiAgICB2YWx1ZTogMSxcbiAgICBwcm9wczoge1xuICAgICAgICBzdHlsZToge1xuICAgICAgICAgICAgZm9udFNpemU6IDUwLFxuICAgICAgICAgICAgYWxpZ25TZWxmOiAnY2VudGVyJyxcbiAgICAgICAgICAgIGp1c3RpZnlDb250ZW50OiAnY2VudGVyJyxcbiAgICAgICAgfVxuICAgIH1cbn07XG5cbi8vIGNyZWF0aW5nIGEgYnV0dG9uIGNvbXBvbmVudCB0byBjbGljayBhbmQgaW5jcmVhc2UgbnVtYmVycy5cbmNvbnN0IGluY3JlYXNlQ291bnRCdXR0b24gPSB7XG4gICAgY29tcG9uZW50OiBcImJ1dHRvblwiLFxuICAgIHZhbHVlOiAnQ0xJQ0sgTUUgVE8gSU5DUkVBU0UnLFxuICAgIG9uUHJlc3M6ICh7IHNldFVpLCBnZXRVaSB9KSA9PiB7XG5cbiAgICAgICAgLy8gaW5jcmVhc2UgY291bnQgYnkgMVxuICAgICAgICBjb25zdCB0ZXh0T2JqID0gZ2V0VWkoXCJ0ZXh0XCIpXG4gICAgICAgIHRleHRPYmoudmFsdWUgPSB0ZXh0T2JqLnZhbHVlICsgMVxuICAgICAgICBzZXRVaShcInRleHRcIiwgdGV4dE9iailcblxuICAgIH1cbn07XG5cbi8vIEZpbmFsbHkgYWRkaW5nIGJvdGggY29tcG9uZW50cyB0byBzY3JlZW4gd2l0aCB2MSh2ZXJ0aWNhbCkgdGFnLlxuY29uc3Qgc2NyZWVuID0ge1xuICAgIG5hbWU6ICdDb3VudFNjcmVlbicsXG4gICAgc2NyZWVuOiB7XG4gICAgICAgIHYxOiBbY291bnRUZXh0LCBpbmNyZWFzZUNvdW50QnV0dG9uXSxcbiAgICB9LFxuICAgIHByb3BzOiB7XG4gICAgICAgIHN0eWxlOiB7IGZsZXg6IDEsIGp1c3RpZnlDb250ZW50OiAnY2VudGVyJyB9LFxuICAgIH1cbn07XG5gXG4gICAgfSxcbiAgICB7XG4gICAgICAgIG5hbWU6XCJGZWVkU2NyZWVuXCJcbiAgICAgICAgY29kZTogYGNvbnN0IGZlZWRUZXh0ID0ge1xuICAgIG5hbWU6IFwiZmVlZF90ZXh0XCIsXG4gICAgY29tcG9uZW50OiBcInRleHRcIixcbiAgICB2YWx1ZTogJ1RoaXMgaXMgRmVlZCcsXG4gICAgcHJvcHM6IHtcbiAgICAgICAgc3R5bGU6IHtcbiAgICAgICAgICAgIGZvbnRTaXplOiAyNSxcbiAgICAgICAgICAgIGNvbG9yOiBcImJsYWNrXCJcbiAgICAgICAgfSxcbiAgICB9XG59O1xuXG5jb25zdCBzY3JlZW4gPSB7XG4gICAgbmFtZTogJ0ZlZWRTY3JlZW4nLFxuICAgIHNjcmVlbjoge1xuICAgICAgICB2MTogW2ZlZWRUZXh0XSxcbiAgICB9LFxuICAgIHByb3BzOiB7XG4gICAgICAgIHN0eWxlOiB7IGZsZXg6IDEsIGp1c3RpZnlDb250ZW50OiAnY2VudGVyJywgYWxpZ25JdGVtczogJ2NlbnRlcicgfSxcbiAgICAgICAgc2Nyb2xsOiBmYWxzZSxcbiAgICAgICAgc2Nyb2xsVmlld1Byb3BzOiB7fVxuICAgIH1cbn07XG5gXG4gICAgfSxcblxuXSI=
+// `;
 const setupProjectWithScreens = ({
   args,
   onFinish,
 }: SetupProjectWithScreensParams): void => {
-  const decodedStringifiedScreens = atob(args.screens); 
-  const decodedScreens: Screen[] = JSON.parse(decodedStringifiedScreens);
-
-  createReactNativeProject({
-    repoName: args.name,
-    nanoversion: args.nanoversion,
-    reactNativeVers: args.reactNativeVers,
-  });
-
-  deleteDefaultAppTsAndBabelFiles({ repoName: args.name });
-
-  mkdirSync(path.join(args.name, "/src/screens/"), { recursive: true });
-
-  downloadNanoAppJsAndBabelFiles({
-    onFinish: () => {
-      let importString = "";
-      decodedScreens.forEach((screenObj) => {
-        writeFileSync(
-          path.join(args.name, "/src/screens/", `${screenObj.name}.js`),
-          `${screenObj.code}\nexport default screen;`
-        );
-        importString += `import ${screenObj.name} from './${screenObj.name}'\n`;
+  const decodedStringifiedScreens = atob(args.screens);
+  const decodedScreens: string = JSON.parse(decodedStringifiedScreens);
+  // console.log(
+  //   "decodedScreens",
+  //   decodedScreens,
+  //   typeof decodedScreens,
+  //   decodedStringifiedScreens
+  // );
+  try {
+    const parsedScreensArray: Screen[] = eval(decodedScreens);
+    // console.log("parsedScreensArray", parsedScreensArray);
+    if (typeof parsedScreensArray === "object" && parsedScreensArray !== null) {
+      createReactNativeProject({
+        repoName: args.name,
+        nanoversion: args.nanoversion,
+        reactNativeVers: args.reactNativeVers,
       });
 
-      writeFileSync(
-        path.join(args.name, "/src/screens/index.js"),
-        `${importString}\nexport default [\n${decodedScreens
-          .map((screenObj) => screenObj.name)
-          .join(",\n")}\n]`
-      );
+      deleteDefaultAppTsAndBabelFiles({ repoName: args.name });
 
-      if (existsSync(path.join(args.name, "/App.js"))) {
-        unlinkSync(path.join(args.name, "/App.js"));
-      }
+      mkdirSync(path.join(args.name, "/src/screens/"), { recursive: true });
 
-      downloadFileWithCallback(
-        `${commonUrl}App.js`,
-        path.join(args.name, "/App.js"),
-        () => {
-          // onFinish();
-          return null;
-        }
-      );
+      downloadNanoAppJsAndBabelFiles({
+        onFinish: () => {
+          let importString = "";
+          parsedScreensArray.forEach((screenObj) => {
+            writeFileSync(
+              path.join(args.name, "/src/screens/", `${screenObj.name}.js`),
+              `${screenObj.code}\nexport default screen;`
+            );
+            importString += `import ${screenObj.name} from './${screenObj.name}'\n`;
+          });
 
-      if (args["package-name"] != null) {
-        const command = `cd ${args.name} && git init && npx react-native-rename@3.2.12 ${args.name} -b ${args["package-name"]} --skipGitStatusCheck `;
-        runCommand(command);
-      }
+          writeFileSync(
+            path.join(args.name, "/src/screens/index.js"),
+            `${importString}\nexport default [\n${parsedScreensArray
+              .map((screenObj) => screenObj.name)
+              .join(",\n")}\n]`
+          );
 
-      onFinish();
-    },
-    repoName: args.name,
-    reactNativeVers: args.reactNativeVers,
-  });
+          if (existsSync(path.join(args.name, "/App.js"))) {
+            unlinkSync(path.join(args.name, "/App.js"));
+          }
+
+          downloadFileWithCallback(
+            `${commonUrl}App.js`,
+            path.join(args.name, "/App.js"),
+            () => {
+              // onFinish();
+              return null;
+            }
+          );
+
+          if (args["package-name"] != null) {
+            const command = `cd ${args.name} && git init && npx react-native-rename@3.2.12 ${args.name} -b ${args["package-name"]} --skipGitStatusCheck `;
+            runCommand(command);
+          }
+
+          onFinish();
+        },
+        repoName: args.name,
+        reactNativeVers: args.reactNativeVers,
+      });
+    }
+  } catch (error) {
+    console.log("Invalid JSON string passed for screens", error);
+  }
 };
 
 interface Dependencies {
@@ -242,11 +250,6 @@ const setupPackages = ({
   updatePackageJsonDependencies(packageJsonPath, packages);
 };
 
-
-
-
-
-
 export const initProjectCommand = async (): Promise<void> => {
   const args: Args = yargs(hideBin(process.argv)).argv;
 
@@ -256,13 +259,25 @@ export const initProjectCommand = async (): Promise<void> => {
       onFinish: () => {
         if (args.assets != null) {
           const decodedAssetsObject = JSON.parse(atob(args.assets));
-          setupAssets({
-            assetsObj: decodedAssetsObject,
-            projectName: args.name,
-          });
+          try {
+            
+            const parsedAssetsObject = JSON.parse(decodedAssetsObject);
+            
+            if (
+              typeof parsedAssetsObject === "object" &&
+              parsedAssetsObject !== null
+            ) {
+              setupAssets({
+                assetsObj: parsedAssetsObject,
+                projectName: args.name,
+              });
 
-          const command = `cd ${args.name} && npm install -g @callstack/react-native-asset && react-native-asset`;
-          runCommand(command);
+              const command = `cd ${args.name} && npm install -g @callstack/react-native-asset && react-native-asset`;
+              runCommand(command);
+            }
+          } catch (error) {
+            console.log("Invalid JSON string passed for assets", error);
+          }
         }
 
         if (args.packages != null) {
@@ -270,7 +285,6 @@ export const initProjectCommand = async (): Promise<void> => {
           const packages = JSON.parse(decodedPackages);
 
           try {
-        
             const parsedObject = JSON.parse(packages);
 
             if (typeof parsedObject === "object" && parsedObject !== null) {

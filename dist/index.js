@@ -61,7 +61,7 @@ function start() {
             changeAppUrlAppIdAppSecretInExistingProject();
             break;
         case "project":
-            // npx use-nano project --screen <base64> --assets <base64> --app-icon <path string> --packages <base64> --version-code <string> --version-number <integer>
+            // npx use-nano project --screens <base64> --assets <base64> --app-icon <path string> --packages <base64> --version-code <string> --version-number <integer>
             initProjectCommand();
             break;
         default:
