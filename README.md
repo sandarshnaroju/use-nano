@@ -106,6 +106,6 @@ npx use-nano configure --app-id <appId> --app-secret <appSecret> --app-url <appU
 ### `project`
 
 ```
-npx use-nano project --screen <base64> --assets <base64> --app-icon <path string> --packages <base64> --version-code <string> --version-number <integer>
+npx use-nano project --screen <base64> --assets <base64> --app-icon <path string> --packages <base64> 
     
 ```
