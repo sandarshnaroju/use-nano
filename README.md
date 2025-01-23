@@ -102,3 +102,10 @@ Will change the paramters in an existing sync enabled `react-native-nano`` proje
 npx use-nano configure --app-id <appId> --app-secret <appSecret> --app-url <appUrl>
 
 ```
+
+### `project`
+
+```
+npx use-nano project --screens <base64> --assets <base64> --app-icon <path string> --packages <base64> --version-code <string> --version-number <integer>
+    
+```
