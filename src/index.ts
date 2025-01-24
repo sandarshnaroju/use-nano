@@ -12,11 +12,11 @@ import { askUserInfoToGenerateKeyStoreFile } from "./commands/generate-keystore/
 import { convertDocsToPdf } from "./commands/md-to-pdf/md-to-pdf.js";
 import { changeAppUrlAppIdAppSecretInExistingProject } from "./commands/configure/index.js";
 import { initProjectCommand } from "./commands/project/index.js";
+import { updateVersion } from "./commands/version/index.js";
 
 const args = process.argv.slice(2);
 const command = args[0];
 const repoName = args[1];
-
 
 function start(): void {
   switch (command) {
@@ -82,6 +82,9 @@ function start(): void {
     case "project":
       // npx use-nano project --screens <base64> --assets <base64> --app-icon <path string> --packages <base64> --version-code <string> --version-number <integer>
       initProjectCommand();
+      break;
+    case "version":
+      updateVersion()
       break;
     default:
       console.log(

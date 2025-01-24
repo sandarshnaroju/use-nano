@@ -109,3 +109,10 @@ npx use-nano configure --app-id <appId> --app-secret <appSecret> --app-url <appU
 npx use-nano project --screen <base64> --assets <base64> --packages <base64> 
     
 ```
+
+### `version`
+
+```
+npx use-nano version --name <string> --version-code <integer> --version-name <string>
+    
+```

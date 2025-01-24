@@ -121,10 +121,10 @@ const setupProjectWithScreens = ({
 }: SetupProjectWithScreensParams): void => {
   const decodedStringifiedScreens = atob(args.screens);
   const decodedScreens: string = JSON.parse(decodedStringifiedScreens);
- 
+
   try {
     const parsedScreensArray: Screen[] = eval(decodedScreens);
-    
+
     if (typeof parsedScreensArray === "object" && parsedScreensArray !== null) {
       createReactNativeProject({
         repoName: args.name,
@@ -254,9 +254,8 @@ export const initProjectCommand = async (): Promise<void> => {
         if (args.assets != null) {
           const decodedAssetsObject = JSON.parse(atob(args.assets));
           try {
-            
             const parsedAssetsObject = JSON.parse(decodedAssetsObject);
-            
+
             if (
               typeof parsedAssetsObject === "object" &&
               parsedAssetsObject !== null
@@ -288,7 +287,7 @@ export const initProjectCommand = async (): Promise<void> => {
             console.log("Invalid JSON string passed for packages");
           }
         }
-       
+
         const command = `cd ${args.name} && rm -rf node_modules`;
         runCommand(command);
       },
