@@ -12,6 +12,7 @@ import { convertDocsToPdf } from "./commands/md-to-pdf/md-to-pdf.js";
 import { changeAppUrlAppIdAppSecretInExistingProject } from "./commands/configure/index.js";
 import { initProjectCommand } from "./commands/project/index.js";
 import { updateVersion } from "./commands/version/index.js";
+import { createWebBundle } from "./commands/web-bundle/index.js";
 const args = process.argv.slice(2);
 const command = args[0];
 const repoName = args[1];
@@ -67,6 +68,9 @@ function start() {
             break;
         case "version":
             updateVersion();
+            break;
+        case 'web-bundle':
+            createWebBundle();
             break;
         default:
             console.log("To create a new Nano project use \n npx use-nano init myawesomeproject ");
