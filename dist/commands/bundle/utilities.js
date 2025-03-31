@@ -88,8 +88,47 @@ export function addAliasToWebPack(aliasObject, repoName) {
     const modifiedConfig = `${stringTillAlias} \n ${stringifiedAlias} \n }, \n ${stringAfterExtensions}`;
     writeFileSync(configPath, modifiedConfig);
 }
-export function serializeWithRegex(obj) {
-    return JSON.stringify(obj, (key, value) => value instanceof RegExp ? value.toString() : value);
+const rulesConfig = {
+    libsconfig: [
+        {
+            name: "react-native-linear-gradient",
+            path: "./libs/react-native-linear-gradient",
+            rules: [],
+            alias: {
+                "react-native-linear-gradient": "react-native-web-linear-gradient",
+            },
+            install: {
+                packages: ["react-native-web-linear-gradient"],
+            },
+        },
+        {
+            name: "react-native-svg",
+            path: "./libs/react-native-svg",
+            install: {
+                packages: ["react-native-svg"],
+            },
+            rules: [
+                {
+                    test: /\.(js|jsx|ts|tsx)$/,
+                    include: `[
+            path.resolve(
+              __dirname,
+              "node_modules/@react-native/assets-registry/registry"
+            ),
+          ]`,
+                },
+            ],
+        },
+    ],
+};
+export function serializeWithSpecialCases(obj) {
+    return JSON.stringify(obj, (key, value) => {
+        if (value instanceof RegExp)
+            return `__REGEXP__:${value.toString()}`;
+        if (typeof value === "string" && value.includes(path.sep))
+            return `${value.toString()}`;
+        return value;
+    });
 }
 export function parseWithSpecialCases(json) {
     return JSON.parse(json, (key, value) => {

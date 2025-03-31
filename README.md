@@ -116,3 +116,20 @@ npx use-nano project --screen <base64> --assets <base64> --packages <base64>
 npx use-nano version --name <string> --version-code <integer> --version-name <string>
     
 ```
+
+
+### `bundle`
+
+`const config = btoa(serializeWithSpecialCases(rulesConfig))`
+
+config parameter takes base64 of custom JSON.stringified rulesConfig as shown above.
+
+To get the original config object `atob` & `parseWithSpecialCases` is used. 
+
+`parseWithSpecialCases`, `serializeWithSpecialCases` , `rulesConfig` are available in `src/commands/bundle/utilities.ts` for reference.
+
+
+```
+npx use-nano bundle --config <string> 
+    
+```
