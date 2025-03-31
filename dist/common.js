@@ -1,8 +1,10 @@
 import { execSync } from "child_process";
+import https from "https";
 import fs from "fs";
+import { x } from "tar";
 export const runCommand = (command) => {
     try {
-        execSync(`${command}`);
+        execSync(`${command}`, { stdio: "inherit" });
     }
     catch (e) {
         console.error(`Failed to execute ${command}`, e);
@@ -45,5 +47,33 @@ export const moveFileByNode = (oldPath, newPath, callback) => {
         });
         readStream.pipe(writeStream);
     }
+};
+export const writeToFile = (text, filePath) => {
+    try {
+        fs.writeFileSync(filePath, text);
+        console.log("File has been written successfully!");
+    }
+    catch (err) {
+        console.error("Error writing to file:", err);
+    }
+};
+export const downloadRepo = (packageName, destination) => {
+    https.get(`https://registry.npmjs.org/${packageName}`, (res) => {
+        let data = "";
+        res.on("data", (chunk) => (data += chunk));
+        res.on("end", () => {
+            const packageInfo = JSON.parse(data);
+            const tarballUrl = packageInfo.dist.tarball;
+            const file = fs.createWriteStream(`${packageName}.tgz`);
+            https.get(tarballUrl, (res) => res.pipe(file));
+            console.log(`Downloaded ${packageName}.tgz`);
+            x({
+                file: `${packageName}.tgz`,
+                cwd: destination, // Optional: Extract into a specific folder
+            })
+                .then(() => console.log("Extraction complete!"))
+                .catch((err) => console.error("Extraction error:", err));
+        });
+    });
 };
 //# sourceMappingURL=common.js.map
