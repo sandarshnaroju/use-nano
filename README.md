@@ -124,7 +124,7 @@ npx use-nano version --name <string> --version-code <integer> --version-name <st
 
 config parameter takes base64 of custom JSON.stringified rulesConfig as shown above.
 
-To get the original config object `parseWithSpecialCases` is used. 
+To get the original config object `atob` & `parseWithSpecialCases` is used. 
 
 `parseWithSpecialCases`, `serializeWithSpecialCases` , `rulesConfig` are available in `src/commands/bundle/utilities.ts` for reference.
 
