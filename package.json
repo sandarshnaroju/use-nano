@@ -1,6 +1,6 @@
 {
   "name": "use-nano",
-  "version": "1.0.69",
+  "version": "1.0.70",
   "description": "",
   "bin": {
     "use-nano": "./dist/index.js"
@@ -13,14 +13,22 @@
   "author": "sandarshnaroju",
   "license": "ISC",
   "dependencies": {
+    "acorn": "^8.14.1",
+    "acorn-walk": "^8.3.4",
     "adm-zip": "^0.5.10",
+    "escodegen": "^2.1.0",
     "eslint-plugin-jest": "^26.9.0",
     "extract-zip": "^2.0.1",
     "inquirer": "^8.2.5",
     "node-fetch": "^3.3.2",
+    "tar": "^7.4.3",
+    "vm": "^0.1.0",
     "yargs": "^17.7.2"
   },
   "devDependencies": {
+    "@types/acorn": "^6.0.4",
+    "@types/escodegen": "^0.0.10",
+    "@types/estree": "^1.0.6",
     "@types/node": "^20.12.8",
     "typescript": "^5.4.5"
   }
