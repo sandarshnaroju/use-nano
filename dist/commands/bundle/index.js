@@ -33,33 +33,6 @@ export const addPackagesAppUrlToNanoConfig = (repoName) => {
     const clientIdCommand = `\nexport const APP_URL = 'appurl'; \nexport const packages = [];`;
     appendFileSync(path.join(repoName, "nano.config.js"), clientIdCommand);
 };
-const rulesConfig = {
-    libsconfig: [
-        {
-            path: "./libs/react-native-linear-gradient",
-            rules: [
-                {
-                    test: /\.js$/,
-                    exclude: /node_modules\/(@react-native-firebase)/,
-                    use: {
-                        loader: "babel-loader",
-                    },
-                },
-                {
-                    test: /\.jsx?$/,
-                    exclude: /node_modules\/(?!(react-native-animatable)\/).*/,
-                    loader: "babel-loader",
-                },
-            ],
-            alias: {
-                "react-native-linear-gradient": "react-native-web-linear-gradient",
-            },
-            install: {
-                packages: ["react-native-web-linear-gradient"],
-            },
-        },
-    ],
-};
 export const createWebBundle = () => {
     const args = yargs(hideBin(process.argv)).argv;
     args.repoName = args.repoName || "nanoWebApp";

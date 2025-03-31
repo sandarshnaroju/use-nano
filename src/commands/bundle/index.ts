@@ -24,7 +24,7 @@ import {
 } from "./constants.js";
 
 import { addWebpackScripts, setupLibPackages } from "./webpack.js";
-import { parseWithSpecialCases, serializeWithRegex } from "./utilities.js";
+import { parseWithSpecialCases } from "./utilities.js";
 
 interface Args {
   libsFolderPath?: string;
@@ -68,33 +68,7 @@ export const addPackagesAppUrlToNanoConfig = (repoName: string): void => {
   appendFileSync(path.join(repoName, "nano.config.js"), clientIdCommand);
 };
 
-const rulesConfig = {
-  libsconfig: [
-    {
-      path: "./libs/react-native-linear-gradient",
-      rules: [
-        {
-          test: /\.js$/,
-          exclude: /node_modules\/(@react-native-firebase)/,
-          use: {
-            loader: "babel-loader",
-          },
-        },
-        {
-          test: /\.jsx?$/,
-          exclude: /node_modules\/(?!(react-native-animatable)\/).*/,
-          loader: "babel-loader",
-        },
-      ],
-      alias: {
-        "react-native-linear-gradient": "react-native-web-linear-gradient",
-      },
-      install: {
-        packages: ["react-native-web-linear-gradient"],
-      },
-    },
-  ],
-};
+
 
 export const createWebBundle = () => {
   const args: Args = yargs(hideBin(process.argv)).argv;
