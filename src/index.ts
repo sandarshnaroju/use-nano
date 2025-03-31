@@ -13,7 +13,7 @@ import { convertDocsToPdf } from "./commands/md-to-pdf/md-to-pdf.js";
 import { changeAppUrlAppIdAppSecretInExistingProject } from "./commands/configure/index.js";
 import { initProjectCommand } from "./commands/project/index.js";
 import { updateVersion } from "./commands/version/index.js";
-import { createWebBundle } from "./commands/web-bundle/index.js";
+import { createWebBundle } from "./commands/bundle/index.js";
 
 const args = process.argv.slice(2);
 const command = args[0];
@@ -88,7 +88,7 @@ function start(): void {
       updateVersion()
       break;
 
-    case 'web-bundle':
+    case 'bundle':
       createWebBundle()
       break;
     default:

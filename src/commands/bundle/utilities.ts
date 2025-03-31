@@ -23,19 +23,21 @@ export function objectToString(obj, indent = 2) {
       // Array
       let temp = "";
       value.forEach((val) => {
-        // console.log("Val", val, typeof val, Object.entries(val));
         if (typeof val === "object" && val !== null && !val.length) {
           str += objectToString(val, indent + 2);
         } else if (typeof val === "string") {
           temp += `'${val}',`;
         }
       });
-      console.log("Temp", temp);
       if (temp.length > 0) {
         str += "[" + temp + "]";
       }
     } else if (typeof value === "string") {
-      str += `'${value}'`;
+      if (value.includes("resolve")) {
+        str += `${value}`;
+      } else {
+        str += `'${value}'`;
+      }
     } else {
       str += value;
     }
@@ -72,7 +74,6 @@ export function addRulesInWebpack(libRules, repoName) {
     libRules.forEach((rule) => {
       stringifiedRules += objectToString(rule) + ", \n";
     });
-
     const modifiedConfig = `${importsString} \n ${moduleExportsToLastExistingRules} \n ${stringifiedRules} \n ], \n }, \n ${stringAfterResolve}`;
 
     writeFileSync(configPath, modifiedConfig);
@@ -83,9 +84,7 @@ export function addRulesInWebpack(libRules, repoName) {
 
 export function addAliasToWebPack(aliasObject, repoName) {
   const configPath = path.resolve(repoName, "webpack.config.js");
-  //   console.log(false,"Reading webpacl", configPath);
 
-  console.log("Alias Object", aliasObject);
 
   let config = readFileSync(configPath, "utf-8");
   const stringTillExtensions = config.slice(0, config.indexOf("extensions:"));
@@ -115,11 +114,16 @@ export function serializeWithRegex(obj) {
   );
 }
 
-export function parseWithRegex(json) {
+export function parseWithSpecialCases(json) {
   return JSON.parse(json, (key, value) => {
-    if (typeof value === "string" && value.startsWith("/")) {
-      const match = value.match(/^\/(.*)\/([gimsuy]*)$/);
-      return match ? new RegExp(match[1], match[2]) : value;
+    if (typeof value === "string") {
+      if (value.startsWith("__REGEXP__:")) {
+        const match = value.substring(11).match(/^\/(.*)\/([gimsuy]*)$/);
+        return match ? new RegExp(match[1], match[2]) : value;
+      }
+      if (value.startsWith("__PATH__:")) {
+        return value.substring(9);
+      }
     }
     return value;
   });

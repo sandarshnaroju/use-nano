@@ -7,7 +7,7 @@ import { COMMAND_ARGUMENTS } from "../../constants.js";
 import { setUpANewMinimalProject } from "../init/installations.js";
 import { appWebJs, babelConfigJs, babelRc, indexWebJs, tsConfigJson, webBundleDevDependencies, webIndexHtml, webPackConfig, } from "./constants.js";
 import { addWebpackScripts, setupLibPackages } from "./webpack.js";
-import { parseWithRegex } from "./utilities.js";
+import { parseWithSpecialCases } from "./utilities.js";
 const addDevDependencies = (repoName) => {
     const packageJsonPath = path.join(repoName, "package.json");
     try {
@@ -17,9 +17,7 @@ const addDevDependencies = (repoName) => {
         // Add or update the new scripts
         Object.assign(packageJson.devDependencies, webBundleDevDependencies);
         // Write the updated package.json back to the file
-        console.log("Adding devDependencies to package.json...");
         writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2), "utf8");
-        console.log("devDependencies added to package.json successfully!");
         rmSync(path.join(repoName, "node_modules"), {
             recursive: true,
             force: true,
@@ -64,11 +62,11 @@ const rulesConfig = {
 };
 export const createWebBundle = () => {
     const args = yargs(hideBin(process.argv)).argv;
+    args.repoName = args.repoName || "nanoWebApp";
     if (args && args.config) {
         const decoded = atob(args.config);
-        const parsedConfig = parseWithRegex(decoded);
+        const parsedConfig = parseWithSpecialCases(decoded);
         const { libsconfig } = parsedConfig;
-        // console.log("parsedConfig", parsedConfig["libsconfig"][1]['rules']);
         setUpANewMinimalProject({
             repoName: args.repoName,
             nanoversion: args[COMMAND_ARGUMENTS.NANO_VERSION],
@@ -102,10 +100,9 @@ export const createWebBundle = () => {
                 runCommand(installLocalRepoCommand);
                 setTimeout(() => {
                     const buildCommand = `cd ${args.repoName} && npm run build`;
-                    console.log("Running Webpack...");
                     runCommand(buildCommand);
                     moveFileByNode(`${args.repoName}/web/dist/app.bundle.js`, `app.bundle.js`, () => {
-                        console.log("File moved successfully!");
+                        console.log("app.bundle.js moved successfully!");
                         return null;
                     });
                 }, 3000);

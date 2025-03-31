@@ -17,7 +17,6 @@ export const addWebpackScripts = (repoName) => {
         // Add or update the new scripts
         Object.assign(packageJson.scripts, newScripts);
         // Write the updated package.json back to the file
-        console.log("Adding scripts to package.json...");
         packageJson = addResolutionsObject(packageJson);
         writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2), "utf8");
         console.log("Scripts added to package.json successfully!");
@@ -36,9 +35,7 @@ function addLineToTopOfFile(filePath, line) {
         // Combine the new line with the existing content
         const updatedContent = line + data;
         // Write the updated content back to the file
-        console.log("Adding line to the top of the file...", updatedContent);
         writeFileSync(filePath, updatedContent, "utf8");
-        console.log("Line added to the top of the file successfully!");
     }
     catch (err) {
         console.error("Error:", err);
@@ -61,7 +58,6 @@ function addObjectToExport(filePath, newName, newComponents = "null") {
             content.slice(arrayEndIndex);
         // Write the updated content back to the file
         writeFileSync(filePath, updatedContent, "utf8");
-        console.log(`Added { name: '${newName}', components: ${newComponents} } to the exported array`);
     }
     catch (err) {
         console.error("Error:", err);
@@ -71,15 +67,12 @@ function moveFolderSync(source, destination) {
     try {
         // Ensure the destination's parent directory exists
         const parentDir = path.dirname(destination);
-        // console.log("parentDir", parentDir);
         if (!existsSync(destination)) {
-            console.log("Creating parent directory...");
             mkdirSync(destination, { recursive: true });
         }
         // Move folder
         // renameSync(source, destination);
         cpSync(source, destination, { recursive: true });
-        console.log(`Copied folder from "${source}" to "${destination}"`);
     }
     catch (error) {
         console.error(`Error moving folder: ${error.message}`);
@@ -96,29 +89,22 @@ export function setupLibPackages(args, libsconfig) {
             const libRules = rules;
             const libAlias = alias;
             const libInstall = install;
-            console.log("libPath  ", name, libPath, libRules, libAlias, libInstall);
             moveFolderSync(`${path}`, `${args.repoName}/src/react-native-nano/src/libs/${name}/`);
-            console.log("libAlias", libAlias);
             if (libAlias) {
                 addAliasToWebPack(libAlias, args.repoName);
             }
             if (libRules) {
-                console.log("libRules", libRules);
                 addRulesInWebpack(libRules, args.repoName);
             }
             if (libInstall) {
-                console.log("libInstall", libInstall);
                 if (libInstall.packages && libInstall.packages.length > 0) {
-                    console.log("libInstall.packages", libInstall.packages.join(" "));
                     runCommand(`cd ${args.repoName} && npm install ${libInstall.packages.join(" ")} --legacy-peer-deps`);
                 }
                 if (libInstall.devPackages && libInstall.devPackages.length > 0) {
-                    console.log("libInstall.devPackages", libInstall.devPackages.join(" "));
                     runCommand(`cd ${args.repoName} && npm install --save-dev ${libInstall.devPackages.join(" ")} --legacy-peer-deps`);
                 }
             }
             if (name) {
-                console.log("name", name);
                 const importName = name.replace(/[^a-zA-Z]/g, "");
                 importString += `import ${importName} from './${name}/config';\n`;
                 exportObjectSring += `{name: '${name}',components:${importName}.components },\n`;
